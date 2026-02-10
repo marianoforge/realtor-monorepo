@@ -7,12 +7,14 @@ export const currentYearOperations = (
   operations: Operation[],
   year: number,
   effectiveYear?: number
-) =>
-  operations.filter((operation: Operation) => {
+) => {
+  const list = Array.isArray(operations) ? operations : [];
+  return list.filter((operation: Operation) => {
     // 🚀 NUEVO: Las operaciones "En Curso" siempre se asocian al año actual/efectivo
     const operationYear = getOperationYear(operation, effectiveYear);
     return operationYear === year;
   });
+};
 
 const getOperationsByMonth = (
   operations: Operation[],
@@ -20,6 +22,7 @@ const getOperationsByMonth = (
   status: OperationStatus,
   effectiveYear?: number
 ): { [key: string]: number } => {
+  const list = Array.isArray(operations) ? operations : [];
   const monthNames = [
     "Enero",
     "Febrero",
@@ -35,7 +38,7 @@ const getOperationsByMonth = (
     "Diciembre",
   ];
 
-  const monthlyTotals: { [key: number]: number } = operations
+  const monthlyTotals: { [key: number]: number } = list
     .filter((operation) => {
       // 🚀 NUEVO: Las operaciones "En Curso" siempre se asocian al año actual/efectivo
       const operationYear = getOperationYear(operation, effectiveYear);

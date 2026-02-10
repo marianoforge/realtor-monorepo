@@ -34,10 +34,16 @@ export function useUserData(): UseUserDataResult {
         const result = response.data;
         const data =
           result && typeof result === "object" && "data" in result
-            ? result.data
+            ? (result as { data: unknown }).data
             : result;
-
-        setUserData({ uid: userID, ...data } as UserData);
+        const plain =
+          data &&
+          typeof data === "object" &&
+          !Array.isArray(data) &&
+          Object.prototype.toString.call(data) === "[object Object]"
+            ? (data as Record<string, unknown>)
+            : {};
+        setUserData({ uid: userID, ...plain } as UserData);
       } catch (err) {
         if (!cancelled) {
           setError(

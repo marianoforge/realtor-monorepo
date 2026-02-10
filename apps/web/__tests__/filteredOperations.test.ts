@@ -413,7 +413,7 @@ describe("filteredOperations", () => {
   });
 
   describe("Casos edge", () => {
-    it("debe retornar undefined cuando operations es undefined", () => {
+    it("debe retornar array vacío cuando operations es undefined", () => {
       const result = filteredOperations(
         undefined,
         OperationStatus.TODAS,
@@ -421,7 +421,7 @@ describe("filteredOperations", () => {
         "all"
       );
 
-      expect(result).toBeUndefined();
+      expect(result).toEqual([]);
     });
 
     it("debe retornar array vacío cuando no hay operaciones", () => {

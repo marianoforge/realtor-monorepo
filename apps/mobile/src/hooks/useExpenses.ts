@@ -19,7 +19,7 @@ export function useExpenses() {
     try {
       setIsLoading(true);
       const data = await fetchUserExpenses(user.uid);
-      setExpenses(data as Expense[]);
+      setExpenses(Array.isArray(data) ? data : []);
       setError(null);
     } catch (err) {
       setError(

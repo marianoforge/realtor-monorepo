@@ -32,7 +32,7 @@ export function useOperations(): UseOperationsResult {
       try {
         const data = await fetchUserOperations(userID);
         if (cancelled) return;
-        setOperations(data as Operation[]);
+        setOperations(Array.isArray(data) ? data : []);
       } catch (err) {
         if (!cancelled) {
           setError(

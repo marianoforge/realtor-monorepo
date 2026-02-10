@@ -298,7 +298,8 @@ export function useDashboardMetrics() {
       objetivoAnual > 0 ? (honorariosBrutos / objetivoAnual) * 100 : 0;
 
     const useLocalCurrency = userData.currency !== "USD";
-    const totalPersonalExpenses = expenses
+    const expensesList = Array.isArray(expenses) ? expenses : [];
+    const totalPersonalExpenses = expensesList
       .filter((exp: Expense) => {
         const expYear = new Date(exp.date).getFullYear();
         return expYear === effectiveYear && exp.operationType !== "ingreso";

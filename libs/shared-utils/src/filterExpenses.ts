@@ -9,9 +9,10 @@ export function filterExpenses(
     searchQuery: string;
   }
 ): Expense[] {
+  const list = Array.isArray(expenses) ? expenses : [];
   const { yearFilter, monthFilter, expenseTypeFilter, searchQuery } = filters;
   const search = searchQuery.trim().toLowerCase();
-  return expenses.filter((expense) => {
+  return list.filter((expense) => {
     const matchesYear =
       yearFilter === "all" || expense.date.startsWith(yearFilter);
     const matchesMonth =

@@ -1,9 +1,14 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const rootDir = path.join(__dirname, "..", "..");
+dotenv.config({ path: path.join(rootDir, ".env") });
+dotenv.config({ path: path.join(rootDir, ".env.local") });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

@@ -5,10 +5,11 @@ import { getOperationYear, getOperationYearAndMonth } from "./getOperationYear";
 export function filteredOperations(
   operations: Operation[] | undefined,
   statusFilter: string,
-  yearFilter: string, // Ahora es string para manejar "all"
+  yearFilter: string,
   monthFilter: string
 ) {
-  return operations?.filter((operation: Operation) => {
+  const list = Array.isArray(operations) ? operations : [];
+  return list.filter((operation: Operation) => {
     // 🚀 NUEVO: Las operaciones "En Curso" siempre usan año/mes actual,
     // incluso si no tienen fechas. Por eso NO las filtramos aquí.
     // Solo filtramos operaciones cerradas/caídas sin fechas.
