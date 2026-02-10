@@ -1,0 +1,83 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ❌ BLOQUEADAS - Ya no se usan
+    match /verifications/{document} {
+      allow read, write: if false;
+    }
+    
+    match /chat_responses/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /unanswered_questions/{document=**} {
+      allow read, write: if false;
+    }
+
+    // ✅ USUARIOS - Solo el propio usuario puede acceder a su documento
+    match /usuarios/{userId} {
+      allow read, write, update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // ✅ TEAMS - Líder puede gestionar, miembros pueden leer
+    match /teams/{teamId} {
+      allow read: if request.auth != null;
+      allow write, update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.teamLeadID || 
+         request.auth.uid == request.resource.data.teamLeadID);
+    }
+
+    // ✅ OPERATIONS - Usuario ve las suyas, líder ve las del equipo
+    match /operations/{operationId} {
+      // Lectura: usuario ve las suyas (user_uid) O líder ve las del equipo (teamId)
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid || 
+         request.auth.uid == resource.data.teamId);
+      // Crear: debe ser parte del equipo (teamId) o ser el usuario asignado
+      allow create: if request.auth != null && 
+        (request.auth.uid == request.resource.data.teamId ||
+         request.auth.uid == request.resource.data.user_uid);
+      // Actualizar/Eliminar: usuario propio o líder del equipo
+      allow update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid || 
+         request.auth.uid == resource.data.teamId);
+    }
+
+    // ✅ EXPENSES - Usuario ve las suyas, líder ve las del equipo
+    match /expenses/{expenseId} {
+      // Lectura: usuario ve las suyas O líder ve las del equipo
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid ||
+         request.auth.uid == resource.data.teamId);
+      // Crear: el user_uid debe ser el usuario autenticado
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.user_uid;
+      // Actualizar/Eliminar: solo el dueño o líder del equipo
+      allow update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid ||
+         request.auth.uid == resource.data.teamId);
+    }
+
+    // ✅ EVENTS - Usuario ve los suyos, líder ve los del equipo
+    match /events/{eventId} {
+      // Lectura: usuario ve los suyos O líder ve los del equipo
+      allow read: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid ||
+         request.auth.uid == resource.data.teamId);
+      // Crear: el user_uid debe ser el usuario autenticado
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.user_uid;
+      // Actualizar/Eliminar: solo el dueño o líder del equipo
+      allow update, delete: if request.auth != null && 
+        (request.auth.uid == resource.data.user_uid ||
+         request.auth.uid == resource.data.teamId);
+    }
+
+    // 🔒 BLOQUEO GENERAL - Todo lo demás bloqueado por defecto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,101 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+package-lock.json
+
+# testing
+/coverage
+**/coverage/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# next.js
+/.next/
+**/apps/web/.next/
+/out/
+
+# nx
+.nx/cache
+.nx/workspace-data
+tmp/
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+serviceAccKey.json
+
+# News cache
+cache/
+*.cache
+
+# Sentry Config File
+.env.sentry-build-plugin
+
+# Debug scripts (local debugging tools)
+scripts/debug/
+scripts
+
+# Generated documentation files
+docs/
+
+# IDE / editors
+.idea/
+*.sublime-*
+
+# Generated exports (pueden contener datos sensibles)
+exports/
+*.export.json
+
+# Scripts y archivos de prueba locales
+test_calculation.js
+test-webhook.sh
+test-*.sh
+*.local.sh
+
+# Expo
+node_modules/
+.expo/
+.yarn/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+cache/
+

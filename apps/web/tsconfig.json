@@ -1,0 +1,38 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@/components/*": ["components/*"],
+      "@/common/*": ["common/*"],
+      "@/lib/*": ["lib/*"],
+      "@/modules/*": ["modules/*"],
+      "@/stores/*": ["stores/*"],
+      "@/pages/*": ["pages/*"],
+      "@gds-si/shared-types": ["../../libs/shared-types/src/index.ts"],
+      "@gds-si/shared-utils": ["../../libs/shared-utils/src/index.ts"],
+      "@gds-si/shared-schemas": ["../../libs/shared-schemas/src/index.ts"],
+      "@gds-si/shared-schemas/*": ["../../libs/shared-schemas/src/*"],
+      "@gds-si/shared-stores": ["../../libs/shared-stores/src/index.ts"],
+      "@gds-si/shared-stores/*": ["../../libs/shared-stores/src/*"],
+      "@gds-si/shared-api": ["../../libs/shared-api/src/index.ts"],
+      "@gds-si/shared-api/*": ["../../libs/shared-api/src/*"],
+      "@gds-si/shared-hooks": ["../../libs/shared-hooks/src/index.ts"],
+      "@gds-si/shared-hooks/*": ["../../libs/shared-hooks/src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next"]
+}

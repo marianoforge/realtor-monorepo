@@ -1,0 +1,3 @@
+export const CAROUSEL_CARD_HEIGHT = 200;
+
+export const OPERATION_CARD_MIN_HEIGHT = 200;

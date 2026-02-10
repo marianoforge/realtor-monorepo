@@ -1,0 +1,10 @@
+{
+  "prettier.configPath": ".prettierrc",
+  "prettier.singleQuote": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "on",
+  "typescript.suggest.autoImports": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative"
+}

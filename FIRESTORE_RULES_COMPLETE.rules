@@ -1,0 +1,161 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================
+    // 👤 COLECCIÓN USUARIOS
+    // ============================================
+    match /usuarios/{userId} {
+      // Los usuarios autenticados pueden leer/escribir sus propios datos
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write, update: if request.auth != null && request.auth.uid == userId;
+      
+      // Subcolección: datos_proyeccion (proyecciones financieras)
+      match /datos_proyeccion/{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // Subcolección: offices (oficinas)
+      match /offices/{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // Subcolección: weeks (semanas)
+      match /weeks/{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // ============================================
+    // 📊 COLECCIÓN OPERACIONES
+    // ============================================
+    match /operations/{operationId} {
+      // Permitir lectura/escritura si el usuario es el creador (teamId)
+      // o si es uno de los asesores asignados (user_uid o user_uid_adicional)
+      allow read: if request.auth != null && (
+        resource.data.teamId == request.auth.uid ||
+        resource.data.user_uid == request.auth.uid ||
+        resource.data.user_uid_adicional == request.auth.uid
+      );
+      
+      allow create: if request.auth != null && 
+        request.resource.data.teamId == request.auth.uid;
+      
+      allow update, delete: if request.auth != null && 
+        resource.data.teamId == request.auth.uid;
+    }
+    
+    // ============================================
+    // 💰 COLECCIÓN GASTOS (EXPENSES)
+    // ============================================
+    match /expenses/{expenseId} {
+      allow read, write: if request.auth != null && 
+        resource.data.user_uid == request.auth.uid;
+      allow create: if request.auth != null && 
+        request.resource.data.user_uid == request.auth.uid;
+    }
+    
+    // ============================================
+    // 👥 COLECCIÓN TEAMS (MIEMBROS DEL EQUIPO)
+    // ============================================
+    match /teams/{teamId} {
+      // El team leader puede ver todos sus miembros
+      allow read: if request.auth != null && (
+        resource.data.teamLeadID == request.auth.uid ||
+        resource.data.email == request.auth.token.email
+      );
+      
+      allow create: if request.auth != null && 
+        request.resource.data.teamLeadID == request.auth.uid;
+      
+      allow update, delete: if request.auth != null && 
+        resource.data.teamLeadID == request.auth.uid;
+      
+      // Subcolección: gastos de agentes
+      match /expenses/{expenseId} {
+        allow read, write: if request.auth != null;
+      }
+    }
+    
+    // ============================================
+    // 📅 COLECCIÓN EVENTOS
+    // ============================================
+    match /events/{eventId} {
+      allow read, write: if request.auth != null && 
+        resource.data.user_uid == request.auth.uid;
+      allow create: if request.auth != null && 
+        request.resource.data.user_uid == request.auth.uid;
+    }
+    
+    // ============================================
+    // 🎯 COLECCIÓN PROSPECCIÓN
+    // ============================================
+    match /prospects/{prospectId} {
+      allow read, write: if request.auth != null && 
+        resource.data.user_uid == request.auth.uid;
+      allow create: if request.auth != null && 
+        request.resource.data.user_uid == request.auth.uid;
+    }
+    
+    // ============================================
+    // 💬 COLECCIÓN MENSAJES
+    // ============================================
+    match /messages/{messageId} {
+      // Permitir leer si eres el remitente o el destinatario
+      allow read: if request.auth != null && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.receiverId == request.auth.uid
+      );
+      
+      // Permitir crear si eres el remitente
+      allow create: if request.auth != null && 
+        request.resource.data.senderId == request.auth.uid;
+      
+      // Permitir actualizar (marcar como leído) si eres el destinatario
+      allow update: if request.auth != null && 
+        resource.data.receiverId == request.auth.uid;
+      
+      allow delete: if request.auth != null && 
+        resource.data.senderId == request.auth.uid;
+    }
+    
+    // ============================================
+    // 📋 COLECCIÓN CRM
+    // ============================================
+    match /realtor_crm/{crmId} {
+      allow read, write: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
+    }
+    
+    // ============================================
+    // 🔓 COLECCIONES PÚBLICAS (PARA REGISTRO)
+    // ============================================
+    match /verifications/{document} {
+      allow read, write: if true;
+      allow delete: if false;
+    }
+    
+    // ============================================
+    // 💬 COLECCIONES DE CHAT/AI
+    // ============================================
+    match /chat_responses/{document=**} {
+      allow read, write: if true;
+    }
+    
+    match /unanswered_questions/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // ============================================
+    // 🔒 BLOQUEO GENERAL (IMPORTANTE: AL FINAL)
+    // ============================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+

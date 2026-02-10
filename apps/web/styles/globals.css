@@ -1,0 +1,521 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+html,
+body,
+:root {
+  font-family: "DM Sans", sans-serif;
+  color: #2d3748;
+}
+
+@layer base {
+  html {
+    background-color: #fafcfe;
+    font-family: "DM Sans", sans-serif;
+    color: #2d3748;
+  }
+}
+.react-calendar {
+  max-width: none !important;
+  border: none !important;
+  font-family: "Inter", sans-serif !important;
+  min-height: 300px !important;
+}
+
+.react-calendar__navigation__label__labelText {
+  font-weight: 600;
+}
+
+.react-calendar__tile--active {
+  background-color: #5faad7 !important;
+  color: black !important;
+}
+
+/* Estilos para FullCalendar */
+.fc {
+  font-family: "DM Sans", sans-serif !important;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: #f1f5f9 !important;
+}
+
+.fc-col-header-cell {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  padding: 12px 8px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+}
+
+.fc-daygrid-day {
+  min-height: 120px !important;
+}
+
+.fc-daygrid-day:hover {
+  background-color: #f8fafc !important;
+}
+
+.fc-day-today {
+  background-color: #eff6ff !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 600 !important;
+}
+
+.fc-daygrid-day-number {
+  color: #374151 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 6px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.fc-daygrid-day-number:hover {
+  background-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+.fc-event {
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  margin: 2px !important;
+  font-size: 12px !important;
+  padding: 4px 6px !important;
+  cursor: pointer !important;
+}
+
+.fc-event:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Eventos pendientes de confirmación (pasados sin marcar como realizados) */
+.event-pending-confirmation {
+  animation: pulse-pending 2s ease-in-out infinite !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+@keyframes pulse-pending {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.fc-event-title {
+  font-weight: 600 !important;
+  color: white !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.fc-event-time {
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  min-width: 45px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Contenedor principal del evento - flexbox para alinear hora y título */
+.fc-event-main {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 4px !important;
+  overflow: hidden !important;
+}
+
+.fc-event-main-frame {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  overflow: hidden !important;
+}
+
+.fc-more-link {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  margin: 2px !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+.fc-more-link:hover {
+  background-color: #1d4ed8 !important;
+}
+
+.fc-timegrid-slot {
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+.fc-timegrid-axis {
+  background-color: #ffffff !important;
+  border-right: 1px solid #e5e7eb !important;
+  font-size: 12px !important;
+  color: #6b7280 !important;
+}
+
+.fc-timegrid-divider {
+  background-color: #f9fafb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.fc-timegrid-slot-lane {
+  border-top: 1px solid #f3f4f6 !important;
+}
+
+.fc-now-indicator-line {
+  border-top: 2px solid #ef4444 !important;
+}
+
+.fc-now-indicator-arrow {
+  border-left-color: #ef4444 !important;
+}
+
+/* Estilos para eventos superpuestos en móvil */
+.fc-timegrid-event {
+  margin: 1px 0 !important;
+  border-radius: 6px !important;
+}
+
+.fc-timegrid-event.fc-event-mirror {
+  opacity: 0.8 !important;
+}
+
+/* Evitar que los eventos se superpongan visualmente */
+.fc-timegrid-col-events {
+  margin: 0 !important;
+}
+
+.fc-timegrid-event-harness {
+  margin: 1px 0 !important;
+}
+
+/* Ocultar indicadores de conflicto/overlap */
+.fc-timegrid-event.fc-event-mirror,
+.fc-timegrid-event.fc-event-selected {
+  opacity: 1 !important;
+}
+
+/* Ocultar barras rojas de conflicto */
+.fc-timegrid-event.fc-event-conflict,
+.fc-event-overlap-indicator {
+  display: none !important;
+}
+
+/* Estilos para eventos en vista de mes (dayGrid) */
+.fc-daygrid-event {
+  margin: 2px 0 !important;
+  padding: 4px 6px !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+}
+
+.fc-daygrid-event-dot {
+  display: none !important;
+}
+
+.fc-daygrid-day-events {
+  margin: 0 !important;
+  padding: 0 2px !important;
+}
+
+/* Mejorar visualización en móvil */
+@media (max-width: 768px) {
+  /* Eventos en vista de mes - mostrar solo título, sin hora */
+  .fc-daygrid-event {
+    margin: 3px 2px !important;
+    padding: 4px 6px !important;
+    border-radius: 6px !important;
+    min-height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    width: calc(100% - 4px) !important;
+  }
+
+  .fc-daygrid-event .fc-event-time {
+    display: none !important;
+  }
+
+  .fc-daygrid-event .fc-event-title {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .fc-daygrid-event-harness {
+    margin: 2px 0 !important;
+  }
+
+  .fc-daygrid-day-events {
+    margin: 0 !important;
+    padding: 2px !important;
+  }
+
+  /* Eventos en vista de tiempo - mostrar hora arriba, título abajo, sin descripción larga */
+  .fc-timegrid-event {
+    margin: 2px 1px !important;
+    min-height: 24px !important;
+    font-size: 10px !important;
+    padding: 2px 4px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  .fc-timegrid-event .fc-event-time {
+    font-size: 9px !important;
+    min-width: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .fc-timegrid-event .fc-event-title {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    white-space: normal !important;
+  }
+
+  /* Asegurar que los eventos no se superpongan */
+  .fc-timegrid-event-harness {
+    position: relative !important;
+    margin: 2px 0 !important;
+    z-index: auto !important;
+  }
+
+  .fc-timegrid-event-harness + .fc-timegrid-event-harness {
+    margin-top: 4px !important;
+  }
+
+  /* Ocultar cualquier indicador de conflicto en móvil */
+  .fc-timegrid-event.fc-event-conflict,
+  .fc-event-overlap-indicator,
+  .fc-timegrid-event::before,
+  .fc-timegrid-event::after {
+    display: none !important;
+  }
+
+  /* Asegurar que cada evento tenga su propio espacio */
+  .fc-timegrid-col-events .fc-timegrid-event-harness {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* Mejorar altura mínima de las celdas de día en móvil */
+  .fc-daygrid-day {
+    min-height: auto !important;
+  }
+
+  .fc-daygrid-day-frame {
+    min-height: 80px !important;
+  }
+}
+
+/* Tablet - mostrar hora pero compacta */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .fc-event-time {
+    min-width: 50px !important;
+  }
+}
+
+/* Desktop - hora completa */
+@media (min-width: 1025px) {
+  .fc-event-time {
+    min-width: 55px !important;
+  }
+}
+
+/* Estilos para eventos específicos */
+.fc-event.event-call {
+  background-color: #10b981 !important;
+  border-color: #065f46 !important;
+}
+
+.fc-event.event-meeting {
+  background-color: #f97316 !important;
+  border-color: #ea580c !important;
+}
+
+.fc-event.event-other {
+  background-color: #3b82f6 !important;
+  border-color: #1d4ed8 !important;
+}
+
+/* Estilos para mejorar la altura de las vistas de tiempo */
+.fc-timegrid {
+  min-height: 800px !important;
+}
+
+.fc-scroller {
+  overflow-y: auto !important;
+  max-height: 800px !important;
+}
+
+.fc-timegrid-body {
+  min-height: 800px !important;
+}
+
+/* Asegurar que las etiquetas de tiempo se vean bien */
+.fc-timegrid-axis-cushion {
+  padding: 0 4px !important;
+}
+
+.fc-timegrid-slot {
+  height: 30px !important;
+}
+
+/* Scroll inicial para vistas de tiempo */
+.fc-timegrid-body .fc-scroller {
+  overflow-y: scroll !important;
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  height: 15px;
+  aspect-ratio: 5;
+  display: grid;
+  --_g: no-repeat radial-gradient(farthest-side, #7ed994 94%, #0000);
+}
+.loader:before,
+.loader:after {
+  content: "";
+  grid-area: 1/1;
+  background:
+    var(--_g) left,
+    var(--_g) right;
+  background-size: 20% 100%;
+  animation: l32 1s infinite;
+}
+.loader:after {
+  background:
+    var(--_g) calc(1 * 100% / 3),
+    var(--_g) calc(2 * 100% / 3);
+  background-size: 20% 100%;
+  animation-direction: reverse;
+}
+@keyframes l32 {
+  80%,
+  100% {
+    transform: rotate(0.5turn);
+  }
+}
+
+h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.react-tooltip {
+  z-index: 100;
+  isolation: isolate;
+}
+
+.react-chatbot-kit-chat-message-container {
+  background-color: #fafcfe;
+  z-index: 9999;
+  height: 468px !important;
+}
+
+.react-chatbot-kit-chat-header {
+  background-color: #fff !important;
+}
+
+.react-chatbot-kit-chat-inner-container {
+  width: 310px !important;
+}
+
+.react-chatbot-kit-chat-input-container {
+  width: 295px !important;
+}
+
+.react-chatbot-kit-chat-container {
+  width: 310px !important;
+}
+
+.react-chatbot-kit-chat-header {
+  display: none !important;
+}
+
+.react-chatbot-kit-chat-message-container {
+  width: 310px !important;
+  background-color: #fff !important;
+}
+
+/* Custom utilities for line clamping */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animación shimmer para barra de progreso */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Animación para el textarea de razón de caída */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+}
+
+.animate-in {
+  animation: slideDown 0.3s ease-out forwards;
+}

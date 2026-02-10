@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ESCENARIOS_CALCULO_NETO</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    
+    /* Estilos personalizados para mejorar legibilidad */
+    h2 {
+      margin-top: 2.5em;
+      margin-bottom: 1em;
+      padding-top: 1em;
+      border-top: 3px solid #4a9eff;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      background-color: #f0f7ff;
+      border-radius: 5px;
+    }
+    
+    h3 {
+      margin-top: 2em;
+      margin-bottom: 0.8em;
+      padding-left: 0.5em;
+      color: #2c5aa0;
+    }
+    
+    /* Estilos para escenarios en la sección descriptiva */
+    h3[id^="escenario-"] {
+      margin-top: 2.5em;
+      margin-bottom: 1em;
+      padding: 1.2em 1em 1.2em 1.5em;
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-left: 4px solid #6c757d;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+    
+    /* Espaciado después de cada escenario */
+    h3[id^="escenario-"] + ul {
+      margin-bottom: 2em;
+      padding: 1em 1em 1em 2em;
+      background-color: #f8f9fa;
+      border-radius: 3px;
+      border-left: 2px solid #e9ecef;
+      font-size: 0.95em;
+    }
+    
+    /* Separador visual entre escenarios */
+    h3[id^="escenario-"]:not(:first-of-type)::before {
+      content: "";
+      display: block;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #dee2e6, transparent);
+      margin: -1em 0 1.5em 0;
+    }
+    
+    /* Alternar colores ligeramente para mejor diferenciación */
+    h3[id*="escenario-1"] {
+      border-left-color: #007bff;
+    }
+    
+    h3[id*="escenario-2"] {
+      border-left-color: #28a745;
+    }
+    
+    h3[id*="escenario-3"] {
+      border-left-color: #ffc107;
+    }
+    
+    h3[id*="escenario-4"] {
+      border-left-color: #dc3545;
+    }
+    
+    h3[id*="escenario-5"] {
+      border-left-color: #6f42c1;
+    }
+    
+    h3[id*="escenario-6"] {
+      border-left-color: #fd7e14;
+    }
+    
+    h4 {
+      margin-top: 1.5em;
+      margin-bottom: 0.6em;
+      padding-left: 0.5em;
+      color: #4a7ba7;
+    }
+    
+    /* Separación entre grupos de ejemplos numéricos */
+    h3#grupo-1-sin-asesores-solo-team-leader-1,
+    h3#grupo-2-un-asesor-no-es-team-leader-1,
+    h3#grupo-3-un-asesor-el-team-leader-es-el-asesor-1,
+    h3#grupo-4-dos-asesores-ninguno-es-team-leader-1,
+    h3#grupo-5-dos-asesores-team-leader-es-asesor-principal-1,
+    h3#grupo-6-dos-asesores-team-leader-es-asesor-adicional-1 {
+      margin-top: 3em;
+      padding: 1em;
+      background-color: #e8f4fd;
+      border-left: 5px solid #4a9eff;
+      border-radius: 5px;
+    }
+    
+    /* Estilos para los escenarios con ejemplos numéricos */
+    h4[id^="escenario-"] {
+      margin-top: 2em;
+      margin-bottom: 1em;
+      padding: 1.2em 1em 1.2em 1.5em;
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-left: 4px solid #28a745;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    
+    /* Espaciado después de cada escenario en ejemplos numéricos */
+    h4[id^="escenario-"] + p {
+      margin-top: 0.5em;
+    }
+    
+    /* Separación visual para las secciones de cálculo y resultado */
+    h4[id^="escenario-"] ~ p,
+    h4[id^="escenario-"] ~ ol {
+      margin-left: 1em;
+      margin-right: 1em;
+      font-size: 0.95em;
+    }
+    
+    /* Hacer que los datos sean más pequeños que el título */
+    h4[id^="escenario-"] + p strong {
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+    
+    /* Separador visual entre escenarios en ejemplos numéricos */
+    h4[id^="escenario-"]:not(:first-of-type)::before {
+      content: "";
+      display: block;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #dee2e6, transparent);
+      margin: -1em 0 1.5em 0;
+    }
+    
+    /* Colores alternados para escenarios en ejemplos numéricos */
+    h4[id*="escenario-1"] {
+      border-left-color: #007bff;
+    }
+    
+    h4[id*="escenario-2"] {
+      border-left-color: #28a745;
+    }
+    
+    h4[id*="escenario-3"] {
+      border-left-color: #ffc107;
+    }
+    
+    h4[id*="escenario-4"] {
+      border-left-color: #dc3545;
+    }
+    
+    h4[id*="escenario-5"] {
+      border-left-color: #6f42c1;
+    }
+    
+    h4[id*="escenario-6"] {
+      border-left-color: #fd7e14;
+    }
+    
+    h4[id^="escenario-"] ~ p strong {
+      display: inline-block;
+      margin-top: 0.5em;
+      padding: 0.5em 1em;
+      background-color: #d4edda;
+      border-left: 3px solid #28a745;
+      border-radius: 3px;
+      width: calc(100% - 2em);
+    }
+    
+    /* Estilos para enlaces a ejemplos */
+    a.ejemplo-link {
+      color: #4a9eff;
+      text-decoration: none;
+      font-size: 0.85em;
+      margin-left: 0.5em;
+      font-weight: normal;
+    }
+    
+    a.ejemplo-link:hover {
+      text-decoration: underline;
+      color: #2c5aa0;
+    }
+    
+    a.ejemplo-link::before {
+      content: "📊 ";
+    }
+    
+    /* Mejorar espaciado en listas de escenarios */
+    ul li {
+      margin-bottom: 0.3em;
+    }
+    
+    /* Estilos para las secciones de cálculo */
+    ol[type="1"] {
+      background-color: #f8f9fa;
+      padding: 1em 1em 1em 2.5em;
+      border-radius: 5px;
+      margin: 1em 0;
+    }
+    
+    /* Estilos para resultados - usando clase en lugar de :contains */
+    p strong {
+      display: inline;
+    }
+    
+    /* Mejorar visualización de resultados */
+    p:has(strong:first-child) {
+      margin-top: 1em;
+      padding: 0.8em;
+      background-color: #f8f9fa;
+      border-left: 3px solid #6c757d;
+      border-radius: 3px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+</head>
+<body>
+<h1
+id="escenarios-de-cálculo-del-neto---formulario-de-operaciones">ESCENARIOS
+DE CÁLCULO DEL NETO - FORMULARIO DE OPERACIONES</h1>
+<p>Esta lista detalla todos los escenarios posibles que pueden aparecer
+al llenar el formulario de operaciones y cómo se calcula el neto en cada
+caso.</p>
+<hr />
+<h2 id="categorización-de-escenarios">CATEGORIZACIÓN DE ESCENARIOS</h2>
+<p>Los escenarios se organizan según: 1. <strong>Cantidad de
+asesores</strong> (0, 1, o 2) 2. <strong>Si el Team Leader
+participa</strong> como asesor 3. <strong>Descuentos aplicados</strong>
+(compartido, referido, franquicia, repartición)</p>
+<hr />
+<h2 id="grupo-1-sin-asesores-solo-team-leader">GRUPO 1: SIN ASESORES
+(Solo Team Leader) <a href="#grupo-1-sin-asesores-solo-team-leader-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-1.1-operación-simple">Escenario 1.1: Operación
+Simple <a href="#escenario-1.1-operación-simple-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Team Leader recibe 100% de los honorarios
+brutos</li>
+</ul>
+<h3 id="escenario-1.2-con-compartido">Escenario 1.2: Con Compartido <a href="#escenario-1.2-con-compartido-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta compartido del valor de
+operación, Team Leader recibe el resto</li>
+</ul>
+<h3 id="escenario-1.3-con-referido">Escenario 1.3: Con Referido <a href="#escenario-1.3-con-referido-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta referido de los honorarios,
+Team Leader recibe el resto</li>
+</ul>
+<h3 id="escenario-1.4-con-compartido-y-referido">Escenario 1.4: Con
+Compartido y Referido <a href="#escenario-1.4-con-compartido-y-referido-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Primero compartido, luego referido, Team
+Leader recibe el resto</li>
+</ul>
+<h3 id="escenario-1.5-con-franquicia">Escenario 1.5: Con Franquicia <a href="#escenario-1.5-con-franquicia-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Team Leader recibe honorarios brutos menos
+el descuento de franquicia</li>
+</ul>
+<h3 id="escenario-1.6-completo-todos-los-descuentos">Escenario 1.6:
+Completo (Todos los Descuentos) <a href="#escenario-1.6-completo-todos-los-descuentos-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Sin asesores</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 5%)</li>
+<li><strong>Cálculo</strong>: Aplica todos los descuentos en orden, Team
+Leader recibe el neto final</li>
+</ul>
+<hr />
+<h2 id="grupo-2-un-asesor-no-es-team-leader">GRUPO 2: UN ASESOR (No es
+Team Leader) <a href="#grupo-2-un-asesor-no-es-team-leader-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-2.1-operación-simple">Escenario 2.1: Operación
+Simple <a href="#escenario-2.1-operación-simple-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 45%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Asesor recibe su %, Team Leader recibe el
+resto</li>
+</ul>
+<h3 id="escenario-2.2-con-compartido">Escenario 2.2: Con Compartido <a href="#escenario-2.2-con-compartido-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 50%)</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta compartido, luego se
+distribuye entre asesor y TL</li>
+</ul>
+<h3 id="escenario-2.3-con-referido">Escenario 2.3: Con Referido <a href="#escenario-2.3-con-referido-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 40%)</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta referido, luego se distribuye
+entre asesor y TL</li>
+</ul>
+<h3 id="escenario-2.4-con-compartido-y-referido">Escenario 2.4: Con
+Compartido y Referido <a href="#escenario-2.4-con-compartido-y-referido-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 60%)</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Compartido → Referido → Distribución →
+Franquicia (si aplica)</li>
+</ul>
+<h3 id="escenario-2.5-con-franquicia">Escenario 2.5: Con Franquicia <a href="#escenario-2.5-con-franquicia-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 45%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 9.5%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se distribuye, luego se descuenta
+franquicia del TL</li>
+</ul>
+<h3 id="escenario-2.6-completo">Escenario 2.6: Completo <a href="#escenario-2.6-completo-1" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 1 asesor (ej: 50%)</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 3%)</li>
+<li><strong>Cálculo</strong>: Todos los descuentos aplicados en
+orden</li>
+</ul>
+<hr />
+<h2 id="grupo-3-un-asesor-el-team-leader-es-el-asesor">GRUPO 3: UN
+ASESOR (El Team Leader es el Asesor) <a href="#grupo-3-un-asesor-el-team-leader-es-el-asesor-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-3.1-operación-simple">Escenario 3.1: Operación
+Simple <a href="#escenario-3.1-operación-simple-3" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es el asesor</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Team Leader recibe 100% (como si no
+hubiera asesor)</li>
+</ul>
+<h3 id="escenario-3.2-con-compartido">Escenario 3.2: Con Compartido <a href="#escenario-3.2-con-compartido-3" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es el asesor</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta compartido, TL recibe el
+resto</li>
+</ul>
+<h3 id="escenario-3.3-con-referido">Escenario 3.3: Con Referido <a href="#escenario-3.3-con-referido-3" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es el asesor</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Se descuenta referido, TL recibe el
+resto</li>
+</ul>
+<h3 id="escenario-3.4-con-franquicia">Escenario 3.4: Con Franquicia <a href="#escenario-3.4-con-franquicia-3" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es el asesor</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: TL recibe honorarios brutos menos
+franquicia</li>
+</ul>
+<h3 id="escenario-3.5-completo">Escenario 3.5: Completo <a href="#escenario-3.5-completo-2" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es el asesor</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 5%)</li>
+<li><strong>Cálculo</strong>: Todos los descuentos aplicados</li>
+</ul>
+<hr />
+<h2 id="grupo-4-dos-asesores-ninguno-es-team-leader">GRUPO 4: DOS
+ASESORES (Ninguno es Team Leader) <a href="#grupo-4-dos-asesores-ninguno-es-team-leader-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-4.1-operación-simple">Escenario 4.1: Operación
+Simple <a href="#escenario-4.1-operación-simple-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 45% y 40%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Asesores se reparten 50% del bruto, TL
+recibe el resto</li>
+</ul>
+<h3 id="escenario-4.2-con-compartido">Escenario 4.2: Con Compartido <a href="#escenario-4.2-con-compartido-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 50% y 30%)</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Compartido → Asesores reparten 50% → TL
+recibe resto</li>
+</ul>
+<h3 id="escenario-4.3-con-referido">Escenario 4.3: Con Referido <a href="#escenario-4.3-con-referido-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 40% y 40%)</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Referido → Asesores reparten 50% → TL
+recibe resto</li>
+</ul>
+<h3 id="escenario-4.4-con-compartido-y-referido">Escenario 4.4: Con
+Compartido y Referido <a href="#escenario-4.4-con-compartido-y-referido-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 45% y 35%)</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Compartido → Referido → Distribución 50% →
+TL</li>
+</ul>
+<h3 id="escenario-4.5-con-franquicia">Escenario 4.5: Con Franquicia <a href="#escenario-4.5-con-franquicia-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 50% y 40%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Distribución → Franquicia se descuenta del
+TL</li>
+</ul>
+<h3 id="escenario-4.6-completo">Escenario 4.6: Completo <a href="#escenario-4.6-completo-3" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ 2 asesores (ej: 45% y 40%)</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 5%)</li>
+<li><strong>Cálculo</strong>: Todos los descuentos en orden</li>
+</ul>
+<hr />
+<h2 id="grupo-5-dos-asesores-team-leader-es-asesor-principal">GRUPO 5:
+DOS ASESORES (Team Leader es Asesor Principal) <a href="#grupo-5-dos-asesores-team-leader-es-asesor-principal-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-5.1-operación-simple">Escenario 5.1: Operación
+Simple <a href="#escenario-5.1-operación-simple-5" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es asesor principal</li>
+<li>✅ 1 asesor adicional (ej: 40%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: TL recibe 100% de una mitad + resto de la
+otra mitad</li>
+</ul>
+<h3 id="escenario-5.2-con-compartido">Escenario 5.2: Con Compartido <a href="#escenario-5.2-con-compartido-5" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es asesor principal</li>
+<li>✅ 1 asesor adicional (ej: 45%)</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Compartido → División especial (TL +
+asesor)</li>
+</ul>
+<h3 id="escenario-5.3-con-referido">Escenario 5.3: Con Referido <a href="#escenario-5.3-con-referido-5" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es asesor principal</li>
+<li>✅ 1 asesor adicional (ej: 50%)</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Referido → División especial</li>
+</ul>
+<h3 id="escenario-5.4-con-franquicia">Escenario 5.4: Con Franquicia <a href="#escenario-5.4-con-franquicia-5" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es asesor principal</li>
+<li>✅ 1 asesor adicional (ej: 40%)</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: División especial → Franquicia del TL</li>
+</ul>
+<h3 id="escenario-5.5-completo">Escenario 5.5: Completo <a href="#escenario-5.5-completo-4" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Team Leader es asesor principal</li>
+<li>✅ 1 asesor adicional (ej: 45%)</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 3%)</li>
+<li><strong>Cálculo</strong>: Todos los descuentos aplicados</li>
+</ul>
+<hr />
+<h2 id="grupo-6-dos-asesores-team-leader-es-asesor-adicional">GRUPO 6:
+DOS ASESORES (Team Leader es Asesor Adicional) <a href="#grupo-6-dos-asesores-team-leader-es-asesor-adicional-1" class="ejemplo-link">Ver ejemplos numéricos</a></h2>
+<h3 id="escenario-6.1-operación-simple">Escenario 6.1: Operación
+Simple <a href="#escenario-6.1-operación-simple-6" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Asesor principal (ej: 45%)</li>
+<li>✅ Team Leader es asesor adicional</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: TL recibe 100% de una mitad + resto de la
+otra mitad</li>
+</ul>
+<h3 id="escenario-6.2-con-compartido">Escenario 6.2: Con Compartido <a href="#escenario-6.2-con-compartido-6" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Asesor principal (ej: 50%)</li>
+<li>✅ Team Leader es asesor adicional</li>
+<li>✅ Con compartido (ej: 1.5%)</li>
+<li>❌ Sin referido</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Compartido → División especial</li>
+</ul>
+<h3 id="escenario-6.3-con-referido">Escenario 6.3: Con Referido <a href="#escenario-6.3-con-referido-6" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Asesor principal (ej: 40%)</li>
+<li>✅ Team Leader es asesor adicional</li>
+<li>❌ Sin compartido</li>
+<li>✅ Con referido (ej: 20%)</li>
+<li>❌ Sin franquicia</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: Referido → División especial</li>
+</ul>
+<h3 id="escenario-6.4-con-franquicia">Escenario 6.4: Con Franquicia <a href="#escenario-6.4-con-franquicia-6" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Asesor principal (ej: 45%)</li>
+<li>✅ Team Leader es asesor adicional</li>
+<li>❌ Sin compartido</li>
+<li>❌ Sin referido</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>❌ Sin repartición</li>
+<li><strong>Cálculo</strong>: División especial → Franquicia</li>
+</ul>
+<h3 id="escenario-6.5-completo">Escenario 6.5: Completo <a href="#escenario-6.5-completo-5" class="ejemplo-link">Ver ejemplo</a></h3>
+<ul>
+<li>✅ Asesor principal (ej: 50%)</li>
+<li>✅ Team Leader es asesor adicional</li>
+<li>✅ Con compartido (ej: 2%)</li>
+<li>✅ Con referido (ej: 15%)</li>
+<li>✅ Con franquicia (ej: 11%)</li>
+<li>✅ Con repartición (ej: 5%)</li>
+<li><strong>Cálculo</strong>: Todos los descuentos aplicados</li>
+</ul>
+<hr />
+<h2 id="resumen-de-variables-por-escenario">RESUMEN DE VARIABLES POR
+ESCENARIO</h2>
+<p>Cada escenario puede tener diferentes combinaciones de:</p>
+<h3 id="variables-obligatorias">Variables Obligatorias</h3>
+<ul>
+<li><code>valor_reserva</code>: Valor de la operación</li>
+<li><code>porcentaje_punta_vendedora</code>: % comisión vendedora</li>
+<li><code>porcentaje_punta_compradora</code>: % comisión compradora</li>
+</ul>
+<h3 id="variables-opcionales-de-descuentos">Variables Opcionales de
+Descuentos</h3>
+<ul>
+<li><code>porcentaje_compartido</code>: 0% a 5% típicamente</li>
+<li><code>porcentaje_referido</code>: 0% a 30% típicamente</li>
+<li><code>isFranchiseOrBroker</code>: 0% a 20% típicamente</li>
+<li><code>reparticion_honorarios_asesor</code>: 0% a 10%
+típicamente</li>
+</ul>
+<h3 id="variables-de-distribución">Variables de Distribución</h3>
+<ul>
+<li><code>realizador_venta</code>: Asesor principal (puede ser
+null)</li>
+<li><code>porcentaje_honorarios_asesor</code>: 0% a 100%</li>
+<li><code>realizador_venta_adicional</code>: Asesor adicional (puede ser
+null)</li>
+<li><code>porcentaje_honorarios_asesor_adicional</code>: 0% a 100%</li>
+</ul>
+<hr />
+<h2 id="total-de-escenarios-posibles">TOTAL DE ESCENARIOS POSIBLES</h2>
+<ul>
+<li><strong>Grupo 1</strong> (Sin asesores): 6 escenarios</li>
+<li><strong>Grupo 2</strong> (1 asesor, no TL): 6 escenarios</li>
+<li><strong>Grupo 3</strong> (1 asesor, es TL): 5 escenarios</li>
+<li><strong>Grupo 4</strong> (2 asesores, ninguno TL): 6 escenarios</li>
+<li><strong>Grupo 5</strong> (2 asesores, TL principal): 5
+escenarios</li>
+<li><strong>Grupo 6</strong> (2 asesores, TL adicional): 5
+escenarios</li>
+</ul>
+<p><strong>Total: 33 escenarios base</strong></p>
+<p>Cada escenario puede tener variaciones según los porcentajes
+específicos, pero la lógica de cálculo es la misma.</p>
+<hr />
+<h2 id="ejemplos-numéricos-por-escenario">EJEMPLOS NUMÉRICOS POR ESCENARIO</h2>
+<p><strong>Datos Base para Todos los Ejemplos:</strong></p>
+<ul>
+<li>Valor propiedad: <strong>$100,000</strong></li>
+<li>% bruto (comisión): <strong>6%</strong></li>
+<li>Compartido: <strong>2%</strong> (cuando aplique)</li>
+<li>Referido: <strong>15%</strong> (cuando aplique)</li>
+<li>Franquicia: <strong>10%</strong> (cuando aplique)</li>
+<li>Repartición: <strong>3%</strong> (cuando aplique)</li>
+</ul>
+<p><strong>⚠️ ORDEN DE APLICACIÓN DE DESCUENTOS:</strong></p>
+<ol type="1">
+<li><strong>Compartido</strong> (se descuenta del valor de operación sobre el bruto inicial)</li>
+<li><strong>Referido</strong> (se descuenta sobre el resultado después de compartido)</li>
+<li><strong>Franquicia</strong> (se descuenta sobre el resultado después de compartido y referido)</li>
+<li><strong>Distribución</strong> entre asesores</li>
+<li><strong>Repartición</strong> (si aplica)</li>
+</ol>
+<hr />
+<h3 id="grupo-1-sin-asesores-solo-team-leader-1">GRUPO 1: SIN ASESORES (Solo Team Leader)</h3>
+<h4 id="escenario-1.1-operación-simple-1">Escenario 1.1: Operación Simple</h4>
+<p><strong>Datos:</strong> Sin asesores, sin descuentos</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = <strong>$6,000</strong></li>
+<li>Team Leader recibe: <strong>$6,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$6,000</strong></p>
+<h4 id="escenario-1.2-con-compartido-1">Escenario 1.2: Con Compartido</h4>
+<p><strong>Datos:</strong> Sin asesores, Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = <strong>$4,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$4,000</strong></p>
+<h4 id="escenario-1.3-con-referido-1">Escenario 1.3: Con Referido</h4>
+<p><strong>Datos:</strong> Sin asesores, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Después de Referido: $6,000 - $900 = <strong>$5,100</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$5,100</strong></p>
+<h4 id="escenario-1.4-con-compartido-y-referido-1">Escenario 1.4: Con Compartido y Referido</h4>
+<p><strong>Datos:</strong> Sin asesores, Compartido 2%, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = <strong>$3,400</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$3,400</strong></p>
+<h4 id="escenario-1.5-con-franquicia-1">Escenario 1.5: Con Franquicia</h4>
+<p><strong>Datos:</strong> Sin asesores, Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Después de Franquicia: $6,000 - $600 = <strong>$5,400</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$5,400</strong></p>
+<h4 id="escenario-1.6-completo-todos-los-descuentos-1">Escenario 1.6: Completo (Todos los Descuentos)</h4>
+<p><strong>Datos:</strong> Sin asesores, Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $3,060 - $180 = <strong>$2,880</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$2,880</strong></p>
+<hr />
+<h3 id="grupo-2-un-asesor-no-es-team-leader-1">GRUPO 2: UN ASESOR (No es Team Leader)</h3>
+<h4 id="escenario-2.1-operación-simple-2">Escenario 2.1: Operación Simple</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, sin descuentos</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Asesor (50%): $6,000 × 50% = <strong>$3,000</strong></li>
+<li>Team Leader: $6,000 - $3,000 = <strong>$3,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$3,000</strong>, Team Leader = <strong>$3,000</strong></p>
+<h4 id="escenario-2.2-con-compartido-2">Escenario 2.2: Con Compartido</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Asesor (50%): $4,000 × 50% = <strong>$2,000</strong></li>
+<li>Team Leader: $4,000 - $2,000 = <strong>$2,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$2,000</strong>, Team Leader = <strong>$2,000</strong></p>
+<h4 id="escenario-2.3-con-referido-2">Escenario 2.3: Con Referido</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Después de Referido: $6,000 - $900 = $5,100</li>
+<li>Asesor (50%): $5,100 × 50% = <strong>$2,550</strong></li>
+<li>Team Leader: $5,100 - $2,550 = <strong>$2,550</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$2,550</strong>, Team Leader = <strong>$2,550</strong></p>
+<h4 id="escenario-2.4-con-compartido-y-referido-2">Escenario 2.4: Con Compartido y Referido</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, Compartido 2%, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Asesor (50%): $3,400 × 50% = <strong>$1,700</strong></li>
+<li>Team Leader: $3,400 - $1,700 = <strong>$1,700</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$1,700</strong>, Team Leader = <strong>$1,700</strong></p>
+<h4 id="escenario-2.5-con-franquicia-2">Escenario 2.5: Con Franquicia</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Después de Franquicia: $6,000 - $600 = $5,400</li>
+<li>Asesor (50%): $5,400 × 50% = <strong>$2,700</strong></li>
+<li>Team Leader: $5,400 - $2,700 = <strong>$2,700</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$2,700</strong>, Team Leader = <strong>$2,700</strong></p>
+<h4 id="escenario-2.6-completo-1">Escenario 2.6: Completo</h4>
+<p><strong>Datos:</strong> 1 asesor 50%, Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Asesor (50%): $3,060 × 50% = $1,530</li>
+<li>Team Leader antes de Repartición: $3,060 - $1,530 = $1,530</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $1,530 - $180 = <strong>$1,350</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor = <strong>$1,530</strong>, Team Leader = <strong>$1,350</strong></p>
+<hr />
+<h3 id="grupo-3-un-asesor-el-team-leader-es-el-asesor-1">GRUPO 3: UN ASESOR (El Team Leader es el Asesor)</h3>
+<h4 id="escenario-3.1-operación-simple-3">Escenario 3.1: Operación Simple</h4>
+<p><strong>Datos:</strong> Team Leader es el asesor, sin descuentos</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Team Leader recibe 100%: <strong>$6,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$6,000</strong></p>
+<h4 id="escenario-3.2-con-compartido-3">Escenario 3.2: Con Compartido</h4>
+<p><strong>Datos:</strong> Team Leader es el asesor, Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Team Leader: $6,000 - $2,000 = <strong>$4,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$4,000</strong></p>
+<h4 id="escenario-3.3-con-referido-3">Escenario 3.3: Con Referido</h4>
+<p><strong>Datos:</strong> Team Leader es el asesor, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Team Leader: $6,000 - $900 = <strong>$5,100</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$5,100</strong></p>
+<h4 id="escenario-3.4-con-franquicia-3">Escenario 3.4: Con Franquicia</h4>
+<p><strong>Datos:</strong> Team Leader es el asesor, Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Team Leader: $6,000 - $600 = <strong>$5,400</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$5,400</strong></p>
+<h4 id="escenario-3.5-completo-2">Escenario 3.5: Completo</h4>
+<p><strong>Datos:</strong> Team Leader es el asesor, Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $3,060 - $180 = <strong>$2,880</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Team Leader = <strong>$2,880</strong></p>
+<hr />
+<h3 id="grupo-4-dos-asesores-ninguno-es-team-leader-1">GRUPO 4: DOS ASESORES (Ninguno es Team Leader)</h3>
+<h4 id="escenario-4.1-operación-simple-4">Escenario 4.1: Operación Simple</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), sin descuentos</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Total para asesores (50% del bruto): $6,000 × 50% = $3,000</li>
+<li>Asesor 1 (50%): $3,000 × 50% = <strong>$1,500</strong></li>
+<li>Asesor 2 (50%): $3,000 × 50% = <strong>$1,500</strong></li>
+<li>Team Leader: $6,000 - $3,000 = <strong>$3,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$1,500</strong>, Asesor 2 = <strong>$1,500</strong>, Team Leader = <strong>$3,000</strong></p>
+<h4 id="escenario-4.2-con-compartido-4">Escenario 4.2: Con Compartido</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Total para asesores (50%): $4,000 × 50% = $2,000</li>
+<li>Asesor 1 (50%): $2,000 × 50% = <strong>$1,000</strong></li>
+<li>Asesor 2 (50%): $2,000 × 50% = <strong>$1,000</strong></li>
+<li>Team Leader: $4,000 - $2,000 = <strong>$2,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$1,000</strong>, Asesor 2 = <strong>$1,000</strong>, Team Leader = <strong>$2,000</strong></p>
+<h4 id="escenario-4.3-con-referido-4">Escenario 4.3: Con Referido</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Después de Referido: $6,000 - $900 = $5,100</li>
+<li>Total para asesores (50%): $5,100 × 50% = $2,550</li>
+<li>Asesor 1 (50%): $2,550 × 50% = <strong>$1,275</strong></li>
+<li>Asesor 2 (50%): $2,550 × 50% = <strong>$1,275</strong></li>
+<li>Team Leader: $5,100 - $2,550 = <strong>$2,550</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$1,275</strong>, Asesor 2 = <strong>$1,275</strong>, Team Leader = <strong>$2,550</strong></p>
+<h4 id="escenario-4.4-con-compartido-y-referido-4">Escenario 4.4: Con Compartido y Referido</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), Compartido 2%, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Total para asesores (50%): $3,400 × 50% = $1,700</li>
+<li>Asesor 1 (50%): $1,700 × 50% = <strong>$850</strong></li>
+<li>Asesor 2 (50%): $1,700 × 50% = <strong>$850</strong></li>
+<li>Team Leader: $3,400 - $1,700 = <strong>$1,700</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$850</strong>, Asesor 2 = <strong>$850</strong>, Team Leader = <strong>$1,700</strong></p>
+<h4 id="escenario-4.5-con-franquicia-4">Escenario 4.5: Con Franquicia</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Después de Franquicia: $6,000 - $600 = $5,400</li>
+<li>Total para asesores (50%): $5,400 × 50% = $2,700</li>
+<li>Asesor 1 (50%): $2,700 × 50% = <strong>$1,350</strong></li>
+<li>Asesor 2 (50%): $2,700 × 50% = <strong>$1,350</strong></li>
+<li>Team Leader: $5,400 - $2,700 = <strong>$2,700</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$1,350</strong>, Asesor 2 = <strong>$1,350</strong>, Team Leader = <strong>$2,700</strong></p>
+<h4 id="escenario-4.6-completo-3">Escenario 4.6: Completo</h4>
+<p><strong>Datos:</strong> 2 asesores (50% y 50%), Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Total para asesores (50%): $3,060 × 50% = $1,530</li>
+<li>Asesor 1 (50%): $1,530 × 50% = $765</li>
+<li>Asesor 2 (50%): $1,530 × 50% = $765</li>
+<li>Team Leader antes de Repartición: $3,060 - $1,530 = $1,530</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $1,530 - $180 = <strong>$1,350</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor 1 = <strong>$765</strong>, Asesor 2 = <strong>$765</strong>, Team Leader = <strong>$1,350</strong></p>
+<hr />
+<h3 id="grupo-5-dos-asesores-team-leader-es-asesor-principal-1">GRUPO 5: DOS ASESORES (Team Leader es Asesor Principal)</h3>
+<h4 id="escenario-5.1-operación-simple-5">Escenario 5.1: Operación Simple</h4>
+<p><strong>Datos:</strong> Team Leader es asesor principal, 1 asesor adicional 50%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Mitad del bruto: $6,000 × 50% = $3,000</li>
+<li>Asesor adicional (50% de su mitad): $3,000 × 50% = $1,500</li>
+<li>Team Leader: $3,000 (100% de su mitad) + ($3,000 - $1,500) = $3,000 + $1,500 = <strong>$4,500</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor adicional = <strong>$1,500</strong>, Team Leader = <strong>$4,500</strong></p>
+<h4 id="escenario-5.2-con-compartido-5">Escenario 5.2: Con Compartido</h4>
+<p><strong>Datos:</strong> Team Leader es asesor principal, 1 asesor adicional 50%, Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Mitad del bruto: $4,000 × 50% = $2,000</li>
+<li>Asesor adicional (50% de su mitad): $2,000 × 50% = $1,000</li>
+<li>Team Leader: $2,000 (100% de su mitad) + ($2,000 - $1,000) = $2,000 + $1,000 = <strong>$3,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor adicional = <strong>$1,000</strong>, Team Leader = <strong>$3,000</strong></p>
+<h4 id="escenario-5.3-con-referido-5">Escenario 5.3: Con Referido</h4>
+<p><strong>Datos:</strong> Team Leader es asesor principal, 1 asesor adicional 50%, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Después de Referido: $6,000 - $900 = $5,100</li>
+<li>Mitad del bruto: $5,100 × 50% = $2,550</li>
+<li>Asesor adicional (50% de su mitad): $2,550 × 50% = $1,275</li>
+<li>Team Leader: $2,550 (100% de su mitad) + ($2,550 - $1,275) = $2,550 + $1,275 = <strong>$3,825</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor adicional = <strong>$1,275</strong>, Team Leader = <strong>$3,825</strong></p>
+<h4 id="escenario-5.4-con-franquicia-5">Escenario 5.4: Con Franquicia</h4>
+<p><strong>Datos:</strong> Team Leader es asesor principal, 1 asesor adicional 50%, Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Después de Franquicia: $6,000 - $600 = $5,400</li>
+<li>Mitad del bruto: $5,400 × 50% = $2,700</li>
+<li>Asesor adicional (50% de su mitad): $2,700 × 50% = $1,350</li>
+<li>Team Leader: $2,700 (100% de su mitad) + ($2,700 - $1,350) = $2,700 + $1,350 = <strong>$4,050</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor adicional = <strong>$1,350</strong>, Team Leader = <strong>$4,050</strong></p>
+<h4 id="escenario-5.5-completo-4">Escenario 5.5: Completo</h4>
+<p><strong>Datos:</strong> Team Leader es asesor principal, 1 asesor adicional 50%, Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Mitad del bruto: $3,060 × 50% = $1,530</li>
+<li>Asesor adicional (50% de su mitad): $1,530 × 50% = $765</li>
+<li>Team Leader antes de Repartición: $1,530 (100% de su mitad) + ($1,530 - $765) = $1,530 + $765 = $2,295</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $2,295 - $180 = <strong>$2,115</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor adicional = <strong>$765</strong>, Team Leader = <strong>$2,115</strong></p>
+<hr />
+<h3 id="grupo-6-dos-asesores-team-leader-es-asesor-adicional-1">GRUPO 6: DOS ASESORES (Team Leader es Asesor Adicional)</h3>
+<h4 id="escenario-6.1-operación-simple-6">Escenario 6.1: Operación Simple</h4>
+<p><strong>Datos:</strong> Asesor principal 50%, Team Leader es asesor adicional</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Mitad del bruto: $6,000 × 50% = $3,000</li>
+<li>Asesor principal (50% de su mitad): $3,000 × 50% = $1,500</li>
+<li>Team Leader: $3,000 (100% de su mitad) + ($3,000 - $1,500) = $3,000 + $1,500 = <strong>$4,500</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor principal = <strong>$1,500</strong>, Team Leader = <strong>$4,500</strong></p>
+<h4 id="escenario-6.2-con-compartido-6">Escenario 6.2: Con Compartido</h4>
+<p><strong>Datos:</strong> Asesor principal 50%, Team Leader es asesor adicional, Compartido 2%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Mitad del bruto: $4,000 × 50% = $2,000</li>
+<li>Asesor principal (50% de su mitad): $2,000 × 50% = $1,000</li>
+<li>Team Leader: $2,000 (100% de su mitad) + ($2,000 - $1,000) = $2,000 + $1,000 = <strong>$3,000</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor principal = <strong>$1,000</strong>, Team Leader = <strong>$3,000</strong></p>
+<h4 id="escenario-6.3-con-referido-6">Escenario 6.3: Con Referido</h4>
+<p><strong>Datos:</strong> Asesor principal 50%, Team Leader es asesor adicional, Referido 15%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Referido: $6,000 × 15% = $900</li>
+<li>Después de Referido: $6,000 - $900 = $5,100</li>
+<li>Mitad del bruto: $5,100 × 50% = $2,550</li>
+<li>Asesor principal (50% de su mitad): $2,550 × 50% = $1,275</li>
+<li>Team Leader: $2,550 (100% de su mitad) + ($2,550 - $1,275) = $2,550 + $1,275 = <strong>$3,825</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor principal = <strong>$1,275</strong>, Team Leader = <strong>$3,825</strong></p>
+<h4 id="escenario-6.4-con-franquicia-6">Escenario 6.4: Con Franquicia</h4>
+<p><strong>Datos:</strong> Asesor principal 50%, Team Leader es asesor adicional, Franquicia 10%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Franquicia: $6,000 × 10% = $600</li>
+<li>Después de Franquicia: $6,000 - $600 = $5,400</li>
+<li>Mitad del bruto: $5,400 × 50% = $2,700</li>
+<li>Asesor principal (50% de su mitad): $2,700 × 50% = $1,350</li>
+<li>Team Leader: $2,700 (100% de su mitad) + ($2,700 - $1,350) = $2,700 + $1,350 = <strong>$4,050</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor principal = <strong>$1,350</strong>, Team Leader = <strong>$4,050</strong></p>
+<h4 id="escenario-6.5-completo-5">Escenario 6.5: Completo</h4>
+<p><strong>Datos:</strong> Asesor principal 50%, Team Leader es asesor adicional, Compartido 2%, Referido 15%, Franquicia 10%, Repartición 3%</p>
+<p><strong>Cálculo:</strong></p>
+<ol type="1">
+<li>Honorarios Brutos: $100,000 × 6% = $6,000</li>
+<li>Compartido: $100,000 × 2% = $2,000</li>
+<li>Después de Compartido: $6,000 - $2,000 = $4,000</li>
+<li>Referido: $4,000 × 15% = $600</li>
+<li>Después de Referido: $4,000 - $600 = $3,400</li>
+<li>Franquicia: $3,400 × 10% = $340</li>
+<li>Después de Franquicia: $3,400 - $340 = $3,060</li>
+<li>Mitad del bruto: $3,060 × 50% = $1,530</li>
+<li>Asesor principal (50% de su mitad): $1,530 × 50% = $765</li>
+<li>Team Leader antes de Repartición: $1,530 (100% de su mitad) + ($1,530 - $765) = $1,530 + $765 = $2,295</li>
+<li>Repartición: $6,000 × 3% = $180</li>
+<li>Team Leader Neto: $2,295 - $180 = <strong>$2,115</strong></li>
+</ol>
+<p><strong>Resultado:</strong> Asesor principal = <strong>$765</strong>, Team Leader = <strong>$2,115</strong></p>
+<hr />
+<h2 id="próximos-pasos-sugeridos">PRÓXIMOS PASOS SUGERIDOS</h2>
+<ol type="1">
+<li><strong>Crear ejemplos numéricos</strong> para cada escenario</li>
+<li><strong>Generar casos de prueba</strong> con valores reales</li>
+<li><strong>Documentar fórmulas específicas</strong> para cada
+grupo</li>
+<li><strong>Crear calculadora interactiva</strong> para probar
+escenarios</li>
+<li><strong>Validar con casos reales</strong> del sistema</li>
+</ol>
+</body>
+</html>

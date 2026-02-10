@@ -1,0 +1,13 @@
+echo "💅 Running Prettier on staged files..."
+npx lint-staged
+
+echo "🔍 Running linter..."
+yarn lint
+
+echo "🔎 Running typecheck..."
+yarn typecheck
+
+echo "🧪 Running unit tests..."
+yarn test --passWithNoTests
+
+echo "✅ Pre-commit checks passed!"
