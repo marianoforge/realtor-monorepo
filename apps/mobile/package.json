@@ -13,6 +13,7 @@
     "axios": "*",
     "currency-codes": "*",
     "currency-symbol-map": "*",
+    "date-fns": "*",
     "date-fns-tz": "*",
     "dotenv": "*",
     "expo": "*",
