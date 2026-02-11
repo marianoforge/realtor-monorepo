@@ -8,22 +8,17 @@
     "scheme": "gds-si",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.gdssi.mobile"
-    },
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.gdssi.mobile" },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.gdssi.mobile"
+      "package": "com.gdssi.mobile",
+      "jsEngine": "jsc"
     },
-    "web": {
-      "bundler": "metro",
-      "favicon": "./assets/images/favicon.png"
-    },
+    "web": { "bundler": "metro", "favicon": "./assets/images/favicon.png" },
     "plugins": [
       "expo-router",
       [
@@ -37,10 +32,7 @@
       ],
       [
         "expo-notifications",
-        {
-          "icon": "./assets/images/icon.png",
-          "color": "#3f37c9"
-        }
+        { "icon": "./assets/images/icon.png", "color": "#3f37c9" }
       ],
       [
         "expo-calendar",
