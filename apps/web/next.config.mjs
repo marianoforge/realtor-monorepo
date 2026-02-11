@@ -198,9 +198,8 @@ export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: "realtor-trackpro",
-
-  project: "javascript-nextjs",
+  org: process.env.SENTRY_ORG || "realtor-trackpro",
+  project: process.env.SENTRY_PROJECT || "javascript-nextjs",
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
@@ -210,6 +209,11 @@ export default withSentryConfig(nextConfig, {
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
+
+  // Skip source map upload if SENTRY_AUTH_TOKEN is not available (e.g. GitHub Actions CI)
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
 
   // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
   // This can increase your server load as well as your hosting bill.
