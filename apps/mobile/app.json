@@ -15,8 +15,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.gdssi.mobile",
-      "jsEngine": "jsc"
+      "package": "com.gdssi.mobile"
     },
     "web": { "bundler": "metro", "favicon": "./assets/images/favicon.png" },
     "plugins": [
