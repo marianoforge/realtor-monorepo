@@ -10,6 +10,7 @@ import {
   Cog8ToothIcon,
   QuestionMarkCircleIcon,
   CalendarIcon,
+  BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
@@ -124,7 +125,7 @@ const VerticalNavbar = () => {
           <span className="text-mediumBlue">
             <ClipboardDocumentListIcon className="h-5 w-5" />
           </span>
-          <span className="font-bold">Operaciones y Clientes</span>
+          <span className="font-bold">Operaciones</span>
         </div>
         <div className="ml-4 space-y-1">
           <NavLink
@@ -142,14 +143,32 @@ const VerticalNavbar = () => {
             label="Nueva Operación"
           />
           <NavLink
-            href="/projections"
-            icon={<ChartBarIcon className="w-4 h-4 mr-2 text-gray-400" />}
-            label="Proyecciones"
+            href="/cartera"
+            icon={
+              <BuildingOffice2Icon className="w-4 h-4 mr-2 text-gray-400" />
+            }
+            label="Cartera"
           />
+        </div>
+      </div>
+
+      <div className="space-y-1 pt-4 border-t border-gray-200 mt-4">
+        <div className="flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg">
+          <span className="text-mediumBlue">
+            <ChartBarIcon className="h-5 w-5" />
+          </span>
+          <span className="font-bold">Prospección y Proyección</span>
+        </div>
+        <div className="ml-4 space-y-1">
           <NavLink
             href="/prospection"
             icon={<UsersIcon className="w-4 h-4 mr-2 text-gray-400" />}
             label="Prospección"
+          />
+          <NavLink
+            href="/projections"
+            icon={<ChartBarIcon className="w-4 h-4 mr-2 text-gray-400" />}
+            label="Proyección"
           />
           <NavLink
             href="/calendar"

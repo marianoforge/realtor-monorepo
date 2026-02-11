@@ -85,6 +85,9 @@ const fetchTokkoProperties = async (
   return response.json();
 };
 
+const TOKKO_STALE_TIME_MS = 1000 * 60 * 10;
+const TOKKO_GC_TIME_MS = 1000 * 60 * 10;
+
 export const useTokkoProperties = (
   apiKey: string | null | undefined,
   offset = 0,
@@ -93,8 +96,10 @@ export const useTokkoProperties = (
   return useQuery<TokkoApiResponse, Error>({
     queryKey: ["tokko-properties", apiKey, offset, limit],
     queryFn: () => fetchTokkoProperties(apiKey, offset, limit),
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: TOKKO_STALE_TIME_MS,
+    gcTime: TOKKO_GC_TIME_MS,
     retry: 2,
+    refetchOnWindowFocus: false,
     enabled: !!apiKey && apiKey.trim() !== "",
   });
 };
@@ -169,8 +174,10 @@ export const useTokkoPropertiesAll = (apiKey: string | null | undefined) => {
       setProgress(100);
       return allProperties;
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: TOKKO_STALE_TIME_MS,
+    gcTime: TOKKO_GC_TIME_MS,
     retry: 2,
+    refetchOnWindowFocus: false,
     enabled: !!apiKey && apiKey.trim() !== "",
   });
 
