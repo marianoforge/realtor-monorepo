@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "yarn@1.22.19",
+  "resolutions": {
+    "react-native": "0.81.5"
+  },
   "scripts": {
     "dev": "nx dev web",
     "build": "nx build web",
