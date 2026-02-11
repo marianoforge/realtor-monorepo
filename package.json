@@ -24,7 +24,9 @@
     "export-operations-lite": "node scripts/export-operations-lite.js",
     "export-operations-by-user": "node scripts/export-operations-by-user.js",
     "fix:md": "python3 scripts/fix-markdown.py",
-    "prepare": "husky"
+    "prepare": "husky",
+    "mobile:build:android": "cd apps/mobile && npx eas build --platform android --profile production",
+    "mobile:submit:android": "cd apps/mobile && npx eas submit --platform android --profile production --latest --track internal"
   },
   "dependencies": {
     "@expo/metro-config": "~54.0.9",
@@ -130,6 +132,7 @@
   },
   "devDependencies": {
     "@expo/cli": "~54.0.16",
+    "eas-cli": "^14.0.0",
     "@nx/expo": "^22.4.5",
     "@nx/jest": "22.4.5",
     "@nx/js": "22.4.5",

@@ -3,16 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "main": "index.js",
-  "scripts": {
-    "eas-build-post-install": "cd ../../ && node tools/scripts/eas-build-post-install.mjs . apps/mobile"
-  },
+  "scripts": {},
   "dependencies": {
     "@expo/metro-config": "*",
+    "dotenv": "*",
     "@react-native-async-storage/async-storage": "*",
     "@testing-library/react-native": "*",
     "expo": "*",
+    "expo-calendar": "*",
     "expo-constants": "*",
     "expo-linking": "*",
+    "expo-notifications": "*",
     "expo-router": "*",
     "expo-secure-store": "*",
     "expo-splash-screen": "*",
@@ -27,9 +28,11 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "*",
+    "react-native-worklets": "~0.5.1",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "*",
     "react-native-svg-transformer": "*",
-    "react-native-web": "*"
+    "react-native-web": "*",
+    "tailwindcss": "^3.4.13"
   }
 }
