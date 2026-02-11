@@ -18,6 +18,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   ChartBarIcon,
   CalendarIcon,
+  BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 import { Dialog, Transition } from "@headlessui/react";
 
@@ -161,7 +162,7 @@ const Navbar = () => {
       items: dashboardItems,
     },
     operations: {
-      title: "Operaciones y Clientes",
+      title: "Operaciones",
       icon: <DocumentTextIcon className="h-5 w-5" />,
       items: [
         {
@@ -175,14 +176,25 @@ const Navbar = () => {
           icon: <PlusIcon className="h-4 w-4" />,
         },
         {
-          href: "/projections",
-          label: "Proyecciones",
-          icon: <ChartBarIcon className="h-4 w-4" />,
+          href: "/cartera",
+          label: "Cartera",
+          icon: <BuildingOffice2Icon className="h-4 w-4" />,
         },
+      ],
+    },
+    prospeccionProyeccion: {
+      title: "Prospección y Proyección",
+      icon: <ChartBarIcon className="h-5 w-5" />,
+      items: [
         {
           href: "/prospection",
           label: "Prospección",
           icon: <UsersIcon className="h-4 w-4" />,
+        },
+        {
+          href: "/projections",
+          label: "Proyección",
+          icon: <ChartBarIcon className="h-4 w-4" />,
         },
         {
           href: "/calendar",

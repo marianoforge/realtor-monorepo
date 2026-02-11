@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, master, staging]
+    branches: [main, master, staging, 'feat/**']
   pull_request:
-    branches: [main, master]
+    branches: [main, master, staging]
 
 env:
   NODE_VERSION: '20'
