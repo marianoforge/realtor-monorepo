@@ -11,6 +11,8 @@
     "@tanstack/react-query": "*",
     "@testing-library/react-native": "*",
     "axios": "*",
+    "currency-codes": "*",
+    "currency-symbol-map": "*",
     "dotenv": "*",
     "expo": "*",
     "expo-calendar": "*",
