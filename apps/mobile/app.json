@@ -41,12 +41,14 @@
           "icon": "./assets/images/icon.png",
           "color": "#3f37c9"
         }
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "La app necesita acceso a tu calendario para agregar eventos."
+        }
       ]
     ],
-    "extra": {
-      "eas": {
-        "projectId": null
-      }
-    }
+    "extra": {}
   }
 }

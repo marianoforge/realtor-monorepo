@@ -3,5 +3,8 @@ export * from "./agentExpensesApi";
 export * from "./auth";
 export * from "./eventsApi";
 export * from "./expensesApi";
+export * from "./googleCalendarApi";
 export * from "./operationsApi";
+export * from "./prospectionApi";
 export * from "./teamExpensesApi";
+export * from "./teamsApi";

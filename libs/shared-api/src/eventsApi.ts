@@ -21,6 +21,33 @@ export const createEvent = async (eventData: EventFormData) => {
   return extractData(response);
 };
 
+export const createEventWithUser = async (
+  userUID: string,
+  eventData: Omit<EventFormData, "syncWithGoogle" | "googleCalendarId">
+) => {
+  const response = await apiClient.post("/api/events", {
+    ...eventData,
+    user_uid: userUID,
+  });
+  return extractData(response);
+};
+
+export interface CreateRemindersPayload {
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eventTime: string;
+  reminders: {
+    sameDay?: boolean;
+    oneDayBefore?: boolean;
+    oneWeekBefore?: boolean;
+  };
+}
+
+export const createReminders = async (payload: CreateRemindersPayload) => {
+  await apiClient.post("/api/notifications/create-reminders", payload);
+};
+
 export const fetchUserEvents = async (userUID: string) => {
   const response = await apiClient.get(`/api/events?user_uid=${userUID}`);
   return extractData(response);

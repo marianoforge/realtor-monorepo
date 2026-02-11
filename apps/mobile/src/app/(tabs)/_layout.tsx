@@ -1,16 +1,19 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { UserRole } from "@gds-si/shared-utils";
 import { useAuthContext } from "../../lib/AuthContext";
 import { usePushNotifications } from "../../hooks/usePushNotifications";
 
 export default function TabsLayout() {
-  const { userID } = useAuthContext();
+  const { userID, role } = useAuthContext();
   usePushNotifications(userID);
+  const isTeamLeader = role === UserRole.TEAM_LEADER_BROKER;
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarActiveTintColor: "#3f37c9",
         tabBarInactiveTintColor: "#a3aed0",
         tabBarStyle: {
@@ -18,10 +21,6 @@ export default function TabsLayout() {
           borderTopColor: "#e5e7eb",
           paddingBottom: 4,
           height: 56,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: "500",
         },
       }}
     >
@@ -50,6 +49,31 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wallet-outline" size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="prospects"
+        options={{
+          title: "Prospección",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="agents"
+        options={{
+          title: "Equipo",
+          href: isTeamLeader ? undefined : null,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="trophy-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="prospect-form"
+        options={{
+          href: null,
         }}
       />
       <Tabs.Screen
