@@ -10,6 +10,7 @@
     "@react-native-community/datetimepicker": "8.4.4",
     "@tanstack/react-query": "*",
     "@testing-library/react-native": "*",
+    "axios": "*",
     "dotenv": "*",
     "expo": "*",
     "expo-calendar": "*",
