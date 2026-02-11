@@ -142,13 +142,15 @@ const VerticalNavbar = () => {
             }
             label="Nueva Operación"
           />
-          <NavLink
-            href="/cartera"
-            icon={
-              <BuildingOffice2Icon className="w-4 h-4 mr-2 text-gray-400" />
-            }
-            label="Cartera"
-          />
+          {userData?.role === UserRole.TEAM_LEADER_BROKER && (
+            <NavLink
+              href="/cartera"
+              icon={
+                <BuildingOffice2Icon className="w-4 h-4 mr-2 text-gray-400" />
+              }
+              label="Cartera"
+            />
+          )}
         </div>
       </div>
 

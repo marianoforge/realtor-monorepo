@@ -17,6 +17,7 @@ import {
   TokkoApiResponse,
   TokkoProperty,
 } from "@/common/hooks/useTokkoProperties";
+import { UserRole } from "@gds-si/shared-utils";
 
 const LIMIT = 100;
 const OFFSET = 0;
@@ -604,7 +605,7 @@ const TokkoTestPage = () => {
 
   if (!apiKey) {
     return (
-      <PrivateRoute>
+      <PrivateRoute requiredRole={UserRole.TEAM_LEADER_BROKER}>
         <PrivateLayout>
           <div className="px-4 sm:px-6 lg:px-8 py-6 w-full">
             <div className="max-w-2xl mx-auto">
@@ -635,7 +636,7 @@ const TokkoTestPage = () => {
   }
 
   return (
-    <PrivateRoute>
+    <PrivateRoute requiredRole={UserRole.TEAM_LEADER_BROKER}>
       <Head>
         <title>Cartera | Realtor Trackpro</title>
         <meta
