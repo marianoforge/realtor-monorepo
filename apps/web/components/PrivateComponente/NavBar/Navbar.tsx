@@ -175,11 +175,6 @@ const Navbar = () => {
           label: "Nueva Operación",
           icon: <PlusIcon className="h-4 w-4" />,
         },
-        {
-          href: "/cartera",
-          label: "Cartera",
-          icon: <BuildingOffice2Icon className="h-4 w-4" />,
-        },
       ],
     },
     prospeccionProyeccion: {
@@ -228,6 +223,17 @@ const Navbar = () => {
 
   const adminSections: MenuSections = {
     ...menuSections,
+    operations: {
+      ...menuSections.operations,
+      items: [
+        ...menuSections.operations.items,
+        {
+          href: "/cartera",
+          label: "Cartera",
+          icon: <BuildingOffice2Icon className="h-4 w-4" />,
+        },
+      ],
+    },
     admin: {
       title: "Administración",
       icon: <UsersIcon className="h-5 w-5" />,
