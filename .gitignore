@@ -98,4 +98,6 @@ npm-debug.*
 *.orig.*
 web-build/
 cache/
+apps/mobile/android/
+apps/mobile/ios/
 
