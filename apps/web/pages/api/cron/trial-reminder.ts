@@ -8,16 +8,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    // Solo permitir peticiones POST para esta operación
-    if (req.method !== "POST") {
+    if (req.method !== "GET" && req.method !== "POST") {
       return res.status(405).json({ message: "Method not allowed" });
     }
 
-    const apiKey = req.headers["x-api-key"];
-    if (!process.env.CRON_API_KEY || apiKey !== process.env.CRON_API_KEY) {
+    const authHeader = req.headers.authorization;
+    if (
+      !process.env.CRON_SECRET ||
+      authHeader !== `Bearer ${process.env.CRON_SECRET}`
+    ) {
       return res.status(401).json({
         message: "Unauthorized access",
-        hint: "Add CRON_API_KEY environment variable in .env.local and Vercel project settings",
       });
     }
 

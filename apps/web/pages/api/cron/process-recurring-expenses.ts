@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/firebaseAdmin";
+import { invalidateCache, CACHE_KEYS } from "@/lib/redis";
 
 interface RecurringExpense {
   id: string;
@@ -49,16 +50,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    // Solo permitir peticiones POST para esta operación
-    if (req.method !== "POST") {
+    if (req.method !== "GET" && req.method !== "POST") {
       return res.status(405).json({ message: "Method not allowed" });
     }
 
-    const apiKey = req.headers["x-api-key"];
-    if (!process.env.CRON_API_KEY || apiKey !== process.env.CRON_API_KEY) {
+    const authHeader = req.headers.authorization;
+    if (
+      !process.env.CRON_SECRET ||
+      authHeader !== `Bearer ${process.env.CRON_SECRET}`
+    ) {
       return res.status(401).json({
         message: "Unauthorized access",
-        hint: "Add CRON_API_KEY environment variable in .env.local and Vercel project settings",
       });
     }
 
@@ -90,6 +92,7 @@ export default async function handler(
     });
 
     const processedExpenses: string[] = [];
+    const affectedUserIds = new Set<string>();
     const batchSize = 450;
     let batch = db.batch();
     let operationCount = 0;
@@ -153,6 +156,7 @@ export default async function handler(
           const newDocRef = db.collection("expenses").doc();
           batch.set(newDocRef, newExpense);
           processedExpenses.push(newDocRef.id);
+          affectedUserIds.add(oldestExpense.user_uid);
           operationCount++;
 
           if (operationCount >= batchSize) {
@@ -170,10 +174,16 @@ export default async function handler(
       await batch.commit();
     }
 
+    await Promise.all(
+      Array.from(affectedUserIds).map((userId) =>
+        invalidateCache(CACHE_KEYS.expenses(userId))
+      )
+    );
+
     return res.status(200).json({
       message: "Recurring expenses processed successfully",
       count: processedExpenses.length,
-      ids: processedExpenses,
+      affectedUsers: affectedUserIds.size,
     });
   } catch (error) {
     console.error("Error procesando gastos recurrentes:", error);
