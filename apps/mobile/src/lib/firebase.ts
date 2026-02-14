@@ -31,23 +31,55 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app: FirebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const hasValidConfig =
+  typeof firebaseConfig.apiKey === "string" && firebaseConfig.apiKey.length > 0;
 
+let app: FirebaseApp;
 let auth: Auth;
-try {
-  auth = firebaseAuth.initializeAuth(app, {
-    persistence: firebaseAuth.getReactNativePersistence(AsyncStorage),
-  });
-} catch (error: unknown) {
-  if (error instanceof Error && error.message.includes("already")) {
-    auth = firebaseAuth.getAuth(app);
-  } else {
-    throw error;
-  }
-}
+let signInWithEmailAndPassword: (
+  auth: Auth,
+  email: string,
+  password: string
+) => Promise<UserCredential>;
+let signOut: (auth: Auth) => Promise<void>;
+let onAuthStateChanged: (
+  auth: Auth,
+  callback: (user: User | null) => void
+) => () => void;
 
-const { signInWithEmailAndPassword, signOut, onAuthStateChanged } =
-  firebaseAuth;
+if (hasValidConfig) {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  try {
+    auth = firebaseAuth.initializeAuth(app, {
+      persistence: firebaseAuth.getReactNativePersistence(AsyncStorage),
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message.includes("already")) {
+      auth = firebaseAuth.getAuth(app);
+    } else {
+      throw error;
+    }
+  }
+  signInWithEmailAndPassword = firebaseAuth.signInWithEmailAndPassword;
+  signOut = firebaseAuth.signOut;
+  onAuthStateChanged = firebaseAuth.onAuthStateChanged;
+} else {
+  app =
+    getApps().length > 0
+      ? getApp()
+      : initializeApp({ apiKey: "-", authDomain: "-", projectId: "-" });
+  auth = firebaseAuth.getAuth(app);
+  signInWithEmailAndPassword = () =>
+    Promise.reject(
+      new Error(
+        "Firebase no configurado. Configure EXPO_PUBLIC_FIREBASE_* en EAS Secrets y vuelva a generar el build."
+      )
+    );
+  signOut = () => Promise.resolve();
+  onAuthStateChanged = (_, callback) => {
+    callback(null);
+    return () => {};
+  };
+}
 
 export { app, auth, signInWithEmailAndPassword, signOut, onAuthStateChanged };
