@@ -4,6 +4,7 @@ import {
   FieldErrors,
   UseFormWatch,
   UseFormTrigger,
+  UseFormSetValue,
 } from "react-hook-form";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
@@ -18,6 +19,7 @@ interface GeneralInfoSectionProps {
   errors: FieldErrors<any>;
   watch: UseFormWatch<any>;
   trigger?: UseFormTrigger<any>;
+  setValue?: UseFormSetValue<any>;
   formattedDate?: string;
   sectionNumber?: number;
   className?: string;
@@ -28,6 +30,7 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
   errors,
   watch,
   trigger,
+  setValue,
   formattedDate = "",
   sectionNumber = 1,
   className = "",
@@ -119,38 +122,38 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
 
       <div className="mt-4">
         <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Exclusividad de la Operación*
+          Exclusividad de la Operación
         </label>
         <div className="flex gap-6">
-          <div className="flex items-center gap-2">
+          <label className="flex items-center gap-2 cursor-pointer">
             <input
-              type="checkbox"
-              {...register("exclusiva", {
-                onChange: () => trigger?.(["exclusiva", "no_exclusiva"]),
-              })}
-              className="h-4 w-4 text-[#0077b6] rounded border-gray-300 focus:ring-[#0077b6]"
+              type="radio"
+              name="exclusividad"
+              checked={watch("exclusiva") === true}
+              onChange={() => {
+                setValue?.("exclusiva", true, { shouldValidate: true });
+                setValue?.("no_exclusiva", false, { shouldValidate: true });
+                trigger?.(["exclusiva", "no_exclusiva"]);
+              }}
+              className="h-4 w-4 text-[#0077b6] border-gray-300 focus:ring-[#0077b6]"
             />
-            <label className="text-sm text-gray-700">Exclusiva</label>
-          </div>
-          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Exclusiva</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
             <input
-              type="checkbox"
-              {...register("no_exclusiva", {
-                onChange: () => trigger?.(["exclusiva", "no_exclusiva"]),
-              })}
-              className="h-4 w-4 text-[#0077b6] rounded border-gray-300 focus:ring-[#0077b6]"
+              type="radio"
+              name="exclusividad"
+              checked={watch("no_exclusiva") === true}
+              onChange={() => {
+                setValue?.("exclusiva", false, { shouldValidate: true });
+                setValue?.("no_exclusiva", true, { shouldValidate: true });
+                trigger?.(["exclusiva", "no_exclusiva"]);
+              }}
+              className="h-4 w-4 text-[#0077b6] border-gray-300 focus:ring-[#0077b6]"
             />
-            <label className="text-sm text-gray-700">No Exclusiva</label>
-          </div>
+            <span className="text-sm text-gray-700">No Exclusiva</span>
+          </label>
         </div>
-        {(errors.exclusiva || errors.no_exclusiva) && (
-          <p className="text-red-500 text-sm mt-1">
-            {
-              (errors.exclusiva?.message ||
-                errors.no_exclusiva?.message) as string
-            }
-          </p>
-        )}
       </div>
     </FormSectionWrapper>
   );

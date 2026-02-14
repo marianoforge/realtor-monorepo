@@ -255,14 +255,22 @@ export default function OperationDetailScreen() {
             />
           ) : null}
           <Row
-            label="Exclusiva"
+            label="Exclusividad"
             value={
-              operation.exclusiva && operation.exclusiva !== "N/A" ? "Sí" : "No"
+              operation.exclusiva === true && operation.no_exclusiva !== true
+                ? "Exclusiva"
+                : operation.no_exclusiva === true &&
+                    operation.exclusiva !== true
+                  ? "No exclusiva"
+                  : "Sin especificar"
             }
             valueColor={
-              operation.exclusiva && operation.exclusiva !== "N/A"
+              operation.exclusiva === true && operation.no_exclusiva !== true
                 ? "text-green-600"
-                : "text-gray-400"
+                : operation.no_exclusiva === true &&
+                    operation.exclusiva !== true
+                  ? "text-slate-700"
+                  : "text-gray-400"
             }
           />
         </Section>

@@ -50,6 +50,7 @@ const ChartExclusiveness = () => {
     porcentajeNoExclusividad,
     cantidadExclusivas,
     cantidadNoExclusivas,
+    cantidadSinEspecificar,
   } = conteoExplusividad(operations);
 
   const pieChartData = [
@@ -86,6 +87,13 @@ const ChartExclusiveness = () => {
           <p className="flex flex-col text-center text-[20px] xl:text-[16px] 2xl:text-[16px] font-semibold items-center justify-center">
             No existen operaciones con exclusividad asignada
           </p>
+          {cantidadSinEspecificar > 0 && (
+            <p className="text-center text-gray-400 text-sm mt-1">
+              {cantidadSinEspecificar}{" "}
+              {cantidadSinEspecificar === 1 ? "operación" : "operaciones"} sin
+              especificar
+            </p>
+          )}
         </div>
       ) : (
         <div className="h-full w-full align-middle">
@@ -138,6 +146,14 @@ const ChartExclusiveness = () => {
           </ResponsiveContainer>
         </div>
       )}
+      {cantidadSinEspecificar > 0 &&
+        !pieChartData.every((op) => op.value <= 0 || !op.value) && (
+          <p className="text-center text-gray-400 text-xs mt-2">
+            {cantidadSinEspecificar}{" "}
+            {cantidadSinEspecificar === 1 ? "operación" : "operaciones"} sin
+            exclusividad asignada
+          </p>
+        )}
     </div>
   );
 };

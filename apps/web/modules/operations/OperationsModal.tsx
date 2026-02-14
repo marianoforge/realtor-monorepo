@@ -127,18 +127,8 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
 
   useEffect(() => {
     if (operation && isOpen) {
-      // Determinar valores de exclusividad - asegurar que al menos uno esté marcado
-      let exclusivaValue = operation.exclusiva === true;
+      const exclusivaValue = operation.exclusiva === true;
       const noExclusivaValue = operation.no_exclusiva === true;
-      // Si ninguno está marcado y el campo no es "N/A", marcar exclusiva por defecto
-      // Cast a unknown para manejar datos legacy que pueden tener "N/A" como string
-      if (
-        !exclusivaValue &&
-        !noExclusivaValue &&
-        (operation.exclusiva as unknown) !== "N/A"
-      ) {
-        exclusivaValue = true;
-      }
 
       // Determinar valores de puntas - asegurar que al menos uno esté marcado para no-Compra
       let puntaCompradora = Boolean(operation.punta_compradora);
@@ -487,33 +477,44 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                   </div>
                   <div className="mt-4">
                     <label className="font-semibold text-[#0077b6] block mb-3">
-                      Exclusividad de la Operación*
+                      Exclusividad de la Operación
                     </label>
                     <div className="flex gap-6">
-                      <label className="flex items-center gap-2">
+                      <label className="flex items-center gap-2 cursor-pointer">
                         <input
-                          type="checkbox"
-                          {...register("exclusiva")}
-                          className="w-4 h-4 text-[#0077b6] border-gray-300 rounded focus:ring-[#0077b6]"
+                          type="radio"
+                          name="exclusividad-modal"
+                          checked={watch("exclusiva") === true}
+                          onChange={() => {
+                            setValue("exclusiva", true, {
+                              shouldValidate: true,
+                            });
+                            setValue("no_exclusiva", false, {
+                              shouldValidate: true,
+                            });
+                          }}
+                          className="w-4 h-4 text-[#0077b6] border-gray-300 focus:ring-[#0077b6]"
                         />
                         <span className="text-gray-700">Exclusiva</span>
                       </label>
-                      <label className="flex items-center gap-2">
+                      <label className="flex items-center gap-2 cursor-pointer">
                         <input
-                          type="checkbox"
-                          {...register("no_exclusiva")}
-                          className="w-4 h-4 text-[#0077b6] border-gray-300 rounded focus:ring-[#0077b6]"
+                          type="radio"
+                          name="exclusividad-modal"
+                          checked={watch("no_exclusiva") === true}
+                          onChange={() => {
+                            setValue("exclusiva", false, {
+                              shouldValidate: true,
+                            });
+                            setValue("no_exclusiva", true, {
+                              shouldValidate: true,
+                            });
+                          }}
+                          className="w-4 h-4 text-[#0077b6] border-gray-300 focus:ring-[#0077b6]"
                         />
                         <span className="text-gray-700">No Exclusiva</span>
                       </label>
                     </div>
-                    {(errors.exclusiva?.message ||
-                      errors.no_exclusiva?.message) && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.exclusiva?.message ||
-                          errors.no_exclusiva?.message}
-                      </p>
-                    )}
                   </div>
                 </ModalSectionWrapper>
 

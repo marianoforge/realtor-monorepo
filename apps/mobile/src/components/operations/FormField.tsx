@@ -125,6 +125,63 @@ export function FormCheckbox({ label, checked, onToggle }: FormCheckboxProps) {
   );
 }
 
+interface FormRadioOption<T extends string = string> {
+  value: T;
+  label: string;
+}
+
+interface FormRadioGroupProps<T extends string = string> {
+  label: string;
+  value: T | null;
+  options: FormRadioOption<T>[];
+  onSelect: (value: T | null) => void;
+  error?: string;
+  required?: boolean;
+}
+
+export function FormRadioGroup<T extends string = string>({
+  label,
+  value,
+  options,
+  onSelect,
+  error,
+  required,
+}: FormRadioGroupProps<T>) {
+  return (
+    <View className="mb-3">
+      <Text className="text-xs font-semibold text-gray-600 mb-1.5 ml-0.5">
+        {label}
+        {required ? <Text className="text-red-500"> *</Text> : null}
+      </Text>
+      <View className="flex-row flex-wrap gap-4">
+        {options.map((opt) => (
+          <TouchableOpacity
+            key={opt.value}
+            onPress={() =>
+              onSelect(value === opt.value ? null : (opt.value as T | null))
+            }
+            className="flex-row items-center gap-2"
+          >
+            <View
+              className={`w-5 h-5 rounded-full border-2 items-center justify-center ${
+                value === opt.value ? "border-indigo-600" : "border-gray-300"
+              }`}
+            >
+              {value === opt.value ? (
+                <View className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
+              ) : null}
+            </View>
+            <Text className="text-sm text-gray-700">{opt.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {error ? (
+        <Text className="text-xs text-red-500 mt-0.5 ml-0.5">{error}</Text>
+      ) : null}
+    </View>
+  );
+}
+
 interface FormDateFieldProps {
   label: string;
   value: string;

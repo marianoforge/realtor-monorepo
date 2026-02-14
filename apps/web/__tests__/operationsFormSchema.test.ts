@@ -175,15 +175,15 @@ describe("Operations Form Schema", () => {
       await expect(schema.validate(noExclusiva)).resolves.toEqual(noExclusiva);
     });
 
-    it("debe requerir al menos una opción de exclusividad", async () => {
+    it("debe aceptar operación sin exclusividad seleccionada", async () => {
       const sinExclusividad = {
         ...validOperationData,
         exclusiva: false,
         no_exclusiva: false,
       };
 
-      await expect(schema.validate(sinExclusividad)).rejects.toThrow(
-        "Debe seleccionar si la operación es exclusiva o no exclusiva"
+      await expect(schema.validate(sinExclusividad)).resolves.toEqual(
+        sinExclusividad
       );
     });
 
