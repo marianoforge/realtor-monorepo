@@ -45,10 +45,15 @@ export const createTeamMemberApiSchema = teamMemberBaseSchema;
 
 /**
  * Schema para actualizar un miembro de equipo
- * Usa passthrough() para permitir campos adicionales
+ * Usa passthrough() para permitir campos adicionales.
+ * Email es más permisivo en updates para no bloquear edición de otros campos
+ * cuando hay emails legacy inválidos en Firestore.
  */
 export const updateTeamMemberSchema = teamMemberBaseSchema
   .partial()
+  .extend({
+    email: z.string().nullable().optional(),
+  })
   .passthrough();
 
 /**

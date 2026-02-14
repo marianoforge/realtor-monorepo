@@ -12,6 +12,7 @@ import {
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import type { Operation } from "@gds-si/shared-types";
+import { safeDateToYYYYMMDD } from "@gds-si/shared-utils";
 import {
   createOperation,
   updateOperation,
@@ -134,10 +135,12 @@ function initFormState(op?: Operation): FormState {
     };
   }
   return {
-    fecha_captacion: op.fecha_captacion ?? "",
-    fecha_reserva: op.fecha_reserva ?? "",
-    fecha_operacion: op.fecha_operacion ?? "",
-    fecha_vencimiento_alquiler: op.fecha_vencimiento_alquiler ?? "",
+    fecha_captacion: safeDateToYYYYMMDD(op.fecha_captacion),
+    fecha_reserva: safeDateToYYYYMMDD(op.fecha_reserva),
+    fecha_operacion: safeDateToYYYYMMDD(op.fecha_operacion),
+    fecha_vencimiento_alquiler: safeDateToYYYYMMDD(
+      op.fecha_vencimiento_alquiler
+    ),
     tipo_operacion: op.tipo_operacion ?? "",
     tipo_inmueble: op.tipo_inmueble ?? "",
     estado: op.estado ?? "En Curso",
@@ -255,10 +258,11 @@ export default function OperationFormScreen() {
     setSaving(true);
     try {
       const payload = {
-        fecha_captacion: form.fecha_captacion || null,
-        fecha_reserva: form.fecha_reserva,
-        fecha_operacion: form.fecha_operacion || null,
-        fecha_vencimiento_alquiler: form.fecha_vencimiento_alquiler || null,
+        fecha_captacion: safeDateToYYYYMMDD(form.fecha_captacion) || null,
+        fecha_reserva: safeDateToYYYYMMDD(form.fecha_reserva),
+        fecha_operacion: safeDateToYYYYMMDD(form.fecha_operacion) || null,
+        fecha_vencimiento_alquiler:
+          safeDateToYYYYMMDD(form.fecha_vencimiento_alquiler) || null,
         tipo_operacion: form.tipo_operacion,
         tipo_inmueble: form.tipo_inmueble || null,
         estado: form.estado,

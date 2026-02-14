@@ -22,7 +22,7 @@ import { schema } from "@gds-si/shared-schemas/operationsFormSchema";
 import { Operation, TeamMember } from "@gds-si/shared-types";
 import { useUserDataStore } from "@/stores/userDataStore";
 import { useTeamMembers } from "@/common/hooks/useTeamMembers";
-import { formatDateForUser } from "@gds-si/shared-utils";
+import { formatDateForUser, safeDateToYYYYMMDD } from "@gds-si/shared-utils";
 import ModalOK from "@/components/PrivateComponente/CommonComponents/Modal";
 import Toast, {
   useToast,
@@ -302,7 +302,12 @@ const OperationsForm = () => {
       localidad_reserva: addressData.city,
       provincia_reserva: addressData.province,
       pais: addressData.country,
-      fecha_operacion: data.fecha_operacion,
+      fecha_captacion: safeDateToYYYYMMDD(data.fecha_captacion),
+      fecha_reserva: safeDateToYYYYMMDD(data.fecha_reserva),
+      fecha_operacion: safeDateToYYYYMMDD(data.fecha_operacion),
+      fecha_vencimiento_alquiler: safeDateToYYYYMMDD(
+        data.fecha_vencimiento_alquiler
+      ),
       honorarios_broker: honorariosBroker,
       honorarios_asesor: honorariosAsesor,
       user_uid: assignedUserUID,

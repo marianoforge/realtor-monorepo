@@ -18,6 +18,7 @@ export * from "./formatCompactNumber";
 export * from "./formatDate";
 export * from "./formatDateForUser";
 export * from "./formatEventDateTime";
+export * from "./safeDateToYYYYMMDD";
 export * from "./formatNumber";
 export * from "./formatOperationsData";
 export * from "./formatValue";

@@ -8,7 +8,7 @@ import Input from "@/components/PrivateComponente/FormComponents/Input";
 import Select from "@/components/PrivateComponente/FormComponents/Select";
 import Button from "@/components/PrivateComponente/FormComponents/Button";
 import TextArea from "@/components/PrivateComponente/FormComponents/TextArea";
-import { calculateHonorarios } from "@gds-si/shared-utils";
+import { calculateHonorarios, safeDateToYYYYMMDD } from "@gds-si/shared-utils";
 import { schema } from "@gds-si/shared-schemas/operationsFormSchema";
 import { updateOperation } from "@/lib/api/operationsApi";
 import { TeamMember, UserData } from "@gds-si/shared-types";
@@ -165,14 +165,12 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
 
       const formattedOperation = {
         ...operation,
-        fecha_operacion: operation.fecha_operacion
-          ? new Date(operation.fecha_operacion).toISOString().split("T")[0]
-          : "",
-        fecha_vencimiento_alquiler: operation.fecha_vencimiento_alquiler
-          ? new Date(operation.fecha_vencimiento_alquiler)
-              .toISOString()
-              .split("T")[0]
-          : "",
+        fecha_captacion: safeDateToYYYYMMDD(operation.fecha_captacion),
+        fecha_reserva: safeDateToYYYYMMDD(operation.fecha_reserva),
+        fecha_operacion: safeDateToYYYYMMDD(operation.fecha_operacion),
+        fecha_vencimiento_alquiler: safeDateToYYYYMMDD(
+          operation.fecha_vencimiento_alquiler
+        ),
         porcentaje_punta_compradora: operation.porcentaje_punta_compradora || 0,
         porcentaje_punta_vendedora: operation.porcentaje_punta_vendedora || 0,
         realizador_venta: operation.realizador_venta || "",
@@ -326,6 +324,12 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
 
       const operationData: Record<string, unknown> = {
         ...data,
+        fecha_captacion: safeDateToYYYYMMDD(data.fecha_captacion),
+        fecha_reserva: safeDateToYYYYMMDD(data.fecha_reserva),
+        fecha_operacion: safeDateToYYYYMMDD(data.fecha_operacion),
+        fecha_vencimiento_alquiler: safeDateToYYYYMMDD(
+          data.fecha_vencimiento_alquiler
+        ),
         direccion_reserva: addressData.address || "",
         localidad_reserva: addressData.city || "",
         provincia_reserva: addressData.province || "",

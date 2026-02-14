@@ -22,19 +22,61 @@ const timeSchema = z
   );
 
 /**
- * Helper para fechas flexibles
+ * Normaliza fechas legacy a formato YYYY-MM-DD antes de validar.
  */
-const flexibleDateString = z
-  .string()
-  .nullable()
-  .optional()
-  .refine(
-    (val) => {
-      if (val === null || val === undefined || val === "") return true;
-      return /^\d{4}-\d{2}-\d{2}$/.test(val);
-    },
-    { message: "Formato de fecha inválido (YYYY-MM-DD)" }
-  );
+const normalizeDateValue = (val: unknown): unknown => {
+  if (val === null || val === undefined || val === "") return val;
+
+  if (
+    typeof val === "object" &&
+    val !== null &&
+    ("seconds" in val || "_seconds" in val)
+  ) {
+    const seconds =
+      (val as Record<string, number>).seconds ??
+      (val as Record<string, number>)._seconds;
+    if (typeof seconds === "number") {
+      return new Date(seconds * 1000).toISOString().split("T")[0];
+    }
+  }
+
+  if (typeof val !== "string") return val;
+
+  const trimmed = val.trim();
+  if (trimmed === "") return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+
+  const ddmmyyyy = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (ddmmyyyy) {
+    const day = ddmmyyyy[1].padStart(2, "0");
+    const month = ddmmyyyy[2].padStart(2, "0");
+    return `${ddmmyyyy[3]}-${month}-${day}`;
+  }
+
+  const parsed = new Date(trimmed);
+  if (!isNaN(parsed.getTime())) return parsed.toISOString().split("T")[0];
+
+  return val;
+};
+
+/**
+ * Helper para fechas flexibles
+ * Usa preprocess para normalizar fechas legacy antes de validar.
+ */
+const flexibleDateString = z.preprocess(
+  normalizeDateValue,
+  z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      (val) => {
+        if (val === null || val === undefined || val === "") return true;
+        return /^\d{4}-\d{2}-\d{2}$/.test(val);
+      },
+      { message: "Formato de fecha inválido (YYYY-MM-DD)" }
+    )
+);
 
 /**
  * Schema base para un evento
