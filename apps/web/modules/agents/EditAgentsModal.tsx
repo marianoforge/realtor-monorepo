@@ -41,18 +41,18 @@ const EditAgentsModal = ({
       e.preventDefault();
 
       const updatedMember = {
-        ...member,
+        id: member.id,
         firstName,
         lastName,
         email,
         numeroTelefono,
         objetivoAnual: objetivoAnual !== "" ? Number(objetivoAnual) : undefined,
-      };
+      } as TeamMember;
       onSubmit(updatedMember);
       onCloseAndUpdate();
     },
     [
-      member,
+      member.id,
       firstName,
       lastName,
       email,
