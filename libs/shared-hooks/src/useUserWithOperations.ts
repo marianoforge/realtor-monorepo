@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Operation, UserData } from "@gds-si/shared-types";
 import { useAuthStore } from "@gds-si/shared-stores";
 
-import { QueryKeys, UserRole } from "@gds-si/shared-utils";
+import { extractApiData, QueryKeys, UserRole } from "@gds-si/shared-utils";
 
 interface UserWithOperations {
   uid: string;
@@ -32,7 +32,12 @@ export const fetchUsersWithOperations = async (
     throw new Error("Failed to fetch users and operations");
   }
 
-  const { usersWithOperations } = await response.json();
+  const body = await response.json();
+  const payload = extractApiData<{ usersWithOperations: UserWithOperations[] }>(
+    body
+  );
+  const usersWithOperations =
+    payload?.usersWithOperations ?? (Array.isArray(payload) ? payload : []);
 
   if (user.role === UserRole.TEAM_LEADER_BROKER) {
     return usersWithOperations.filter(

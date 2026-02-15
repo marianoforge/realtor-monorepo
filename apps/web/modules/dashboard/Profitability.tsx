@@ -21,9 +21,7 @@ const Profitability = () => {
 
   const { results } = useCalculationsStore();
   const { data: teamMembers } = useTeamMembers();
-  const teamMemberIds = teamMembers
-    ?.map((member: { id: string }) => member.id)
-    .filter(Boolean);
+  const teamMemberIds = teamMembers?.map((member) => member.id).filter(Boolean);
 
   const {
     data: expenses = [],

@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuthStore } from "@gds-si/shared-stores";
 
+import { extractApiData } from "@gds-si/shared-utils";
+
 const fetchUserCurrencySymbol = async (userId: string): Promise<string> => {
   if (!userId) {
     console.error("User ID is required but not provided.");
@@ -21,8 +23,10 @@ const fetchUserCurrencySymbol = async (userId: string): Promise<string> => {
     throw new Error(errorMessage);
   }
 
-  const data = await response.json();
-  return data.currencySymbol || "";
+  const data = extractApiData<{ currencySymbol?: string }>(
+    await response.json()
+  );
+  return data?.currencySymbol ?? "";
 };
 
 export const useUserCurrencySymbol = (userId: string) => {

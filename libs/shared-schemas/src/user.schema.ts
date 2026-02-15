@@ -64,10 +64,8 @@ export const updateUserSchema = z
   })
   .passthrough(); // Permitir campos adicionales
 
-/**
- * Schema para actualizar perfil de usuario
- * Más permisivo para manejar campos null del frontend
- */
+export const localeEnum = z.enum(["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"]);
+
 export const updateProfileSchema = z
   .object({
     firstName: z.string().max(100).nullable().optional(),
@@ -80,8 +78,9 @@ export const updateProfileSchema = z
       .nullable()
       .optional(),
     tokkoApiKey: z.string().nullable().optional(),
+    locale: localeEnum.nullable().optional(),
   })
-  .passthrough(); // Permitir campos adicionales
+  .passthrough();
 
 /**
  * Schema para query de usuarios
@@ -115,7 +114,8 @@ export const userSchema = userBaseSchema.extend({
   subscriptionCanceledAt: z.string().nullable().optional(),
   lastSyncAt: z.string().nullable().optional(),
   tokkoApiKey: z.string().nullable().optional(),
-  createdAt: z.any(), // Firestore Timestamp
+  locale: localeEnum.nullable().optional(),
+  createdAt: z.any(),
 });
 
 // Tipos inferidos

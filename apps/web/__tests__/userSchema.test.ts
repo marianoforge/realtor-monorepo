@@ -5,6 +5,7 @@ import {
   updateProfileSchema,
   userQuerySchema,
   userSchema,
+  localeEnum,
 } from "@/lib/schemas/user.schema";
 
 declare const describe: jest.Describe, it: jest.It, expect: jest.Expect;
@@ -177,6 +178,24 @@ describe("User Schema - updateUserSchema", () => {
     if (result.success) {
       expect(result.data.customField).toBe("custom_value");
     }
+  });
+});
+
+describe("User Schema - localeEnum", () => {
+  it("debe aceptar todos los locales soportados", () => {
+    const validLocales = ["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"];
+    validLocales.forEach((locale) => {
+      const result = localeEnum.safeParse(locale);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  it("debe rechazar locales no soportados", () => {
+    const invalidLocales = ["es-MX", "es-ES", "en-US", "es", "", null];
+    invalidLocales.forEach((locale) => {
+      const result = localeEnum.safeParse(locale);
+      expect(result.success).toBe(false);
+    });
   });
 });
 
@@ -380,6 +399,32 @@ describe("User Schema - updateProfileSchema", () => {
         tokkoApiKey: longKey,
       });
       expect(result.success).toBe(true);
+    });
+  });
+
+  describe("locale", () => {
+    it("debe aceptar locale es-CO", () => {
+      const result = updateProfileSchema.safeParse({ locale: "es-CO" });
+      expect(result.success).toBe(true);
+      if (result.success) expect(result.data.locale).toBe("es-CO");
+    });
+
+    it("debe aceptar todos los locales válidos", () => {
+      ["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"].forEach((locale) => {
+        const result = updateProfileSchema.safeParse({ locale });
+        expect(result.success).toBe(true);
+        if (result.success) expect(result.data.locale).toBe(locale);
+      });
+    });
+
+    it("debe aceptar locale null", () => {
+      const result = updateProfileSchema.safeParse({ locale: null });
+      expect(result.success).toBe(true);
+    });
+
+    it("debe rechazar locale inválido", () => {
+      const result = updateProfileSchema.safeParse({ locale: "es-MX" });
+      expect(result.success).toBe(false);
     });
   });
 

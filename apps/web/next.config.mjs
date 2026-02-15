@@ -19,6 +19,7 @@ const nextConfig = {
     "@gds-si/shared-stores",
     "@gds-si/shared-api",
     "@gds-si/shared-hooks",
+    "@gds-si/shared-i18n",
   ],
   // Remove console.log in production
   compiler: {
@@ -112,6 +113,8 @@ const nextConfig = {
       "@gds-si/shared-stores": path.resolve(__dirname, "../../libs/shared-stores/src"),
       "@gds-si/shared-api": path.resolve(__dirname, "../../libs/shared-api/src"),
       "@gds-si/shared-hooks": path.resolve(__dirname, "../../libs/shared-hooks/src"),
+      "@gds-si/shared-i18n": path.resolve(__dirname, "../../libs/shared-i18n/src"),
+      "@gds-si/shared-i18n/*": path.resolve(__dirname, "../../libs/shared-i18n/src/"),
     };
 
     // Fix for XLSX and other Node.js modules in server-side

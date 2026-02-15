@@ -4,9 +4,20 @@ import {
   BuildingOfficeIcon,
   PhoneIcon,
   CurrencyDollarIcon,
+  MapPinIcon,
 } from "@heroicons/react/24/outline";
 
 import { formatNumber } from "@gds-si/shared-utils";
+
+export type LocaleOption = "es-AR" | "es-CL" | "es-CO" | "es-UY" | "es-PY";
+
+const LOCALE_LABELS: Record<LocaleOption, string> = {
+  "es-AR": "Argentina",
+  "es-CL": "Chile",
+  "es-CO": "Colombia",
+  "es-UY": "Uruguay",
+  "es-PY": "Paraguay",
+};
 
 interface PersonalDataSectionProps {
   firstName: string;
@@ -19,6 +30,8 @@ interface PersonalDataSectionProps {
   setNumeroTelefono: (value: string) => void;
   objetivoAnual: number;
   setObjetivoAnual: (value: number) => void;
+  locale: LocaleOption | "";
+  setLocale: (value: LocaleOption) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
@@ -33,6 +46,8 @@ const PersonalDataSection: React.FC<PersonalDataSectionProps> = ({
   setNumeroTelefono,
   objetivoAnual,
   setObjetivoAnual,
+  locale,
+  setLocale,
   onSubmit,
 }) => {
   return (
@@ -106,8 +121,33 @@ const PersonalDataSection: React.FC<PersonalDataSectionProps> = ({
           />
         </div>
 
-        {/* Objetivo Anual */}
-        <div className="md:col-span-2">
+        {/* País para términos */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            <MapPinIcon className="w-4 h-4 inline mr-1" />
+            País para términos
+          </label>
+          <select
+            value={locale || "es-AR"}
+            onChange={(e) => setLocale(e.target.value as LocaleOption)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+          >
+            {(Object.entries(LOCALE_LABELS) as [LocaleOption, string][]).map(
+              ([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              )
+            )}
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Define el vocabulario de la app (ej. Alquiler/Renta,
+            Inquilino/Arrendatario).
+          </p>
+        </div>
+
+        {/* Objetivo Anual de Ventas */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             <CurrencyDollarIcon className="w-4 h-4 inline mr-1" />
             Objetivo Anual de Ventas

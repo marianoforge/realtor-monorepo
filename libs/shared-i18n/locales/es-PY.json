@@ -1,0 +1,64 @@
+{
+  "operation": {
+    "rent": "Alquiler",
+    "rent_traditional": "Alquiler Tradicional",
+    "rent_temporary": "Alquiler Temporal",
+    "rent_commercial": "Alquiler Comercial",
+    "sale": "Venta",
+    "purchase": "Compra",
+    "rent_expiry": "Vencimiento Alquiler",
+    "rent_expiry_label": "Fecha de Vencimiento del Alquiler",
+    "boleto": "Boleto",
+    "escritura": "Escritura",
+    "reserva": "Reserva",
+    "fecha_reserva_promesa": "Fecha de Reserva"
+  },
+  "property": {
+    "department": "Departamentos",
+    "house": "Casa",
+    "ph": "PH",
+    "commercial_premises": "Locales Comerciales",
+    "offices": "Oficinas",
+    "industrial": "Galpones",
+    "land": "Terrenos",
+    "farm": "Chacra",
+    "other": "Otro",
+    "single": "Propiedad",
+    "plural": "Propiedades"
+  },
+  "party": {
+    "owner": "Propietario",
+    "tenant": "Inquilino",
+    "seller": "Vendedor",
+    "buyer": "Comprador",
+    "side_seller": "Punta Vendedora",
+    "side_buyer": "Punta Compradora",
+    "side_owner": "Punta Propietario",
+    "side_tenant": "Punta Inquilino"
+  },
+  "fees": {
+    "honorarios": "Honorarios",
+    "broker_fee": "Honorarios Broker",
+    "agent_fee": "Honorarios Asesor"
+  },
+  "expenses": {
+    "expensas": "Expensas",
+    "deposit": "Fianza",
+    "office_rent": "Alquiler Oficina",
+    "signage": "Cartelería"
+  },
+  "status": {
+    "in_progress": "En Curso",
+    "closed": "Cerrada",
+    "fallen": "Caída"
+  },
+  "common": {
+    "portfolio": "Cartera",
+    "profitability": "Rentabilidad",
+    "real_estate_agency": "Inmobiliaria",
+    "broker": "Broker",
+    "development": "Desarrollo Inmobiliario",
+    "parking": "Cochera",
+    "loteamiento": "Loteo"
+  }
+}

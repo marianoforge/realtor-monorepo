@@ -247,10 +247,12 @@ const FormExpensesAgents: React.FC = () => {
                     ) : (
                       <Select
                         label="Asesor"
-                        options={teamMembers?.map((member: TeamMember) => ({
-                          value: member.id,
-                          label: member.firstName + " " + member.lastName,
-                        }))}
+                        options={
+                          teamMembers?.map((member) => ({
+                            value: member.id,
+                            label: member.firstName + " " + member.lastName,
+                          })) ?? []
+                        }
                         register={register}
                         name="teamMember"
                         error={errors.teamMember?.message}

@@ -39,9 +39,7 @@ const IncomeAgentsListCards: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: teamMembers } = useTeamMembers();
-  const teamMemberIds = teamMembers
-    ?.map((member: { id: string }) => member.id)
-    .filter(Boolean);
+  const teamMemberIds = teamMembers?.map((member) => member.id).filter(Boolean);
 
   // Fetch expenses for team members (same as expenses table)
   const { data: usersWithExpenses = [], isLoading } =

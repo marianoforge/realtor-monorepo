@@ -14,10 +14,17 @@ import { Ionicons } from "@expo/vector-icons";
 import type { Operation } from "@gds-si/shared-types";
 import { safeDateToYYYYMMDD } from "@gds-si/shared-utils";
 import {
+  getOperationTypeOptions,
+  getPropertyTypeOptions,
+  getStatusOptions,
+  isRentalOperationType,
+} from "@gds-si/shared-i18n";
+import {
   createOperation,
   updateOperation,
 } from "@gds-si/shared-api/operationsApi";
 import { useOperations } from "../../hooks/useOperations";
+import { useI18n } from "../../hooks/useI18n";
 import { useAuthContext } from "../../lib/AuthContext";
 import { AppHeader } from "../../components/AppHeader";
 import {
@@ -27,39 +34,6 @@ import {
   FormRadioGroup,
   FormDateField,
 } from "../../components/operations/FormField";
-
-const OPERATION_TYPES = [
-  "Venta",
-  "Compra",
-  "Alquiler Tradicional",
-  "Alquiler Temporal",
-  "Alquiler Comercial",
-  "Fondo de Comercio",
-  "Desarrollo Inmobiliario",
-  "Cochera",
-  "Loteamiento",
-  "Lotes Para Desarrollos",
-];
-
-const PROPERTY_TYPES = [
-  "Casa",
-  "PH",
-  "Departamentos",
-  "Locales Comerciales",
-  "Oficinas",
-  "Naves Industriales",
-  "Terrenos",
-  "Chacras",
-  "Otro",
-];
-
-const STATUS_OPTIONS = ["En Curso", "Cerrada", "Caída"];
-
-const RENTAL_TYPES = [
-  "Alquiler Tradicional",
-  "Alquiler Temporal",
-  "Alquiler Comercial",
-];
 
 interface FormState {
   fecha_captacion: string;
@@ -241,7 +215,11 @@ export default function OperationFormScreen() {
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  const isRental = RENTAL_TYPES.includes(form.tipo_operacion);
+  const { t } = useI18n();
+  const operationTypeOptions = useMemo(() => getOperationTypeOptions(t), [t]);
+  const propertyTypeOptions = useMemo(() => getPropertyTypeOptions(t), [t]);
+  const statusOptions = useMemo(() => getStatusOptions(t), [t]);
+  const isRental = isRentalOperationType(form.tipo_operacion);
   const needsPropertyType =
     form.tipo_operacion === "Venta" || form.tipo_operacion === "Compra";
 
@@ -387,7 +365,7 @@ export default function OperationFormScreen() {
             <FormPicker
               label="Tipo de Operación"
               value={form.tipo_operacion}
-              options={OPERATION_TYPES}
+              options={operationTypeOptions}
               onSelect={(v) => updateField("tipo_operacion", v)}
               error={errors.tipo_operacion}
               required
@@ -397,7 +375,7 @@ export default function OperationFormScreen() {
               <FormPicker
                 label="Tipo de Inmueble"
                 value={form.tipo_inmueble}
-                options={PROPERTY_TYPES}
+                options={propertyTypeOptions}
                 onSelect={(v) => updateField("tipo_inmueble", v)}
                 error={errors.tipo_inmueble}
                 required
@@ -407,7 +385,7 @@ export default function OperationFormScreen() {
             <FormPicker
               label="Estado"
               value={form.estado}
-              options={STATUS_OPTIONS}
+              options={statusOptions}
               onSelect={(v) => updateField("estado", v)}
             />
 
@@ -434,7 +412,7 @@ export default function OperationFormScreen() {
           <View className="bg-white rounded-xl border border-gray-100 p-4 mb-4">
             <Text className="text-sm font-bold text-gray-800 mb-3">Fechas</Text>
             <FormDateField
-              label="Fecha de Reserva / Promesa"
+              label={`${t.operation.fecha_reserva_promesa}*`}
               value={form.fecha_reserva}
               onChangeText={(v) => updateField("fecha_reserva", v)}
               error={errors.fecha_reserva}
@@ -452,7 +430,7 @@ export default function OperationFormScreen() {
             />
             {isRental ? (
               <FormDateField
-                label="Vencimiento Alquiler"
+                label={t.operation.rent_expiry}
                 value={form.fecha_vencimiento_alquiler}
                 onChangeText={(v) =>
                   updateField("fecha_vencimiento_alquiler", v)
@@ -523,7 +501,11 @@ export default function OperationFormScreen() {
             <View className="flex-row gap-3">
               <View className="flex-1">
                 <FormField
-                  label={isRental ? "% Punta Propietario" : "% Punta Vendedora"}
+                  label={
+                    isRental
+                      ? `% ${t.party.side_owner}`
+                      : `% ${t.party.side_seller}`
+                  }
                   value={form.porcentaje_punta_vendedora}
                   onChangeText={(v) =>
                     updateField("porcentaje_punta_vendedora", v)
@@ -533,7 +515,11 @@ export default function OperationFormScreen() {
               </View>
               <View className="flex-1">
                 <FormField
-                  label={isRental ? "% Punta Inquilino" : "% Punta Compradora"}
+                  label={
+                    isRental
+                      ? `% ${t.party.side_tenant}`
+                      : `% ${t.party.side_buyer}`
+                  }
                   value={form.porcentaje_punta_compradora}
                   onChangeText={(v) =>
                     updateField("porcentaje_punta_compradora", v)
@@ -552,14 +538,14 @@ export default function OperationFormScreen() {
 
             <View className="flex-row gap-4 mb-2">
               <FormCheckbox
-                label={isRental ? "Punta Propietario" : "Punta Vendedora"}
+                label={isRental ? t.party.side_owner : t.party.side_seller}
                 checked={form.punta_vendedora}
                 onToggle={() =>
                   updateField("punta_vendedora", !form.punta_vendedora)
                 }
               />
               <FormCheckbox
-                label={isRental ? "Punta Inquilino" : "Punta Compradora"}
+                label={isRental ? t.party.side_tenant : t.party.side_buyer}
                 checked={form.punta_compradora}
                 onToggle={() =>
                   updateField("punta_compradora", !form.punta_compradora)

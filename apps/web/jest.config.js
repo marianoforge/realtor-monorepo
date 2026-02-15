@@ -35,6 +35,8 @@ const config = {
     "^@gds-si/shared-api/(.*)$": "<rootDir>/../../libs/shared-api/src/$1",
     "^@gds-si/shared-hooks$": "<rootDir>/../../libs/shared-hooks/src/index.ts",
     "^@gds-si/shared-hooks/(.*)$": "<rootDir>/../../libs/shared-hooks/src/$1",
+    "^@gds-si/shared-i18n$": "<rootDir>/../../libs/shared-i18n/src/index.ts",
+    "^@gds-si/shared-i18n/(.*)$": "<rootDir>/../../libs/shared-i18n/src/$1",
   },
   testMatch: [
     "<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}",

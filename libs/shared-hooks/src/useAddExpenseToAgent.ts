@@ -3,6 +3,8 @@ import axios from "axios";
 
 import { useAuthStore } from "@gds-si/shared-stores";
 
+import { extractApiData } from "@gds-si/shared-utils";
+
 interface ExpenseData {
   date: string;
   amount: number;
@@ -30,7 +32,7 @@ export const useAddExpenseToAgent = (onSuccessCallback: () => void) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      return response.data;
+      return extractApiData(response.data) ?? response.data;
     },
     onSuccess: () => {
       onSuccessCallback();

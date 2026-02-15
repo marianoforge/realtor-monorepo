@@ -4,7 +4,7 @@ import axios from "axios";
 import { Operation } from "@gds-si/shared-types";
 import { useAuthStore } from "@gds-si/shared-stores";
 
-import { QueryKeys } from "@gds-si/shared-utils";
+import { extractApiData, QueryKeys } from "@gds-si/shared-utils";
 
 interface TeamMember {
   id: string;
@@ -32,7 +32,7 @@ export const useGetTeamData = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    return response.data;
+    return extractApiData<TeamData>(response.data) ?? response.data;
   };
 
   const { data, error, isLoading, refetch } = useQuery({

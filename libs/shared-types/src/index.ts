@@ -204,8 +204,8 @@ export interface UserData {
   // Campos para manejo de suscripciones canceladas
   subscriptionCanceledAt?: string | null;
   lastSyncAt?: string | null;
-  // Campo para API de Tokko Broker
   tokkoApiKey?: string | null;
+  locale?: "es-AR" | "es-CL" | "es-CO" | "es-UY" | "es-PY" | null;
 }
 
 export interface UserDataState extends BaseState<UserData> {

@@ -1,0 +1,64 @@
+{
+  "operation": {
+    "rent": "Arriendo",
+    "rent_traditional": "Arriendo Tradicional",
+    "rent_temporary": "Arriendo Temporal",
+    "rent_commercial": "Arriendo Comercial",
+    "sale": "Venta",
+    "purchase": "Compra",
+    "rent_expiry": "Vencimiento Arriendo",
+    "rent_expiry_label": "Fecha de Vencimiento del Arriendo",
+    "boleto": "Promesa",
+    "escritura": "Escritura",
+    "reserva": "Reserva",
+    "fecha_reserva_promesa": "Fecha de Reserva"
+  },
+  "property": {
+    "department": "Apartamentos",
+    "house": "Casa",
+    "ph": "PH",
+    "commercial_premises": "Locales Comerciales",
+    "offices": "Oficinas",
+    "industrial": "Bodegas",
+    "land": "Lotes",
+    "farm": "Finca",
+    "other": "Otro",
+    "single": "Inmueble",
+    "plural": "Inmuebles"
+  },
+  "party": {
+    "owner": "Propietario",
+    "tenant": "Arrendatario",
+    "seller": "Vendedor",
+    "buyer": "Comprador",
+    "side_seller": "Punta Vendedora",
+    "side_buyer": "Punta Compradora",
+    "side_owner": "Punta Propietario",
+    "side_tenant": "Punta Arrendatario"
+  },
+  "fees": {
+    "honorarios": "Honorarios",
+    "broker_fee": "Honorarios Corredor",
+    "agent_fee": "Honorarios Asesor"
+  },
+  "expenses": {
+    "expensas": "Administración",
+    "deposit": "Depósito",
+    "office_rent": "Arriendo Oficina",
+    "signage": "Cartelería"
+  },
+  "status": {
+    "in_progress": "En Curso",
+    "closed": "Cerrada",
+    "fallen": "Caída"
+  },
+  "common": {
+    "portfolio": "Cartera",
+    "profitability": "Rentabilidad",
+    "real_estate_agency": "Inmobiliaria",
+    "broker": "Corredor",
+    "development": "Desarrollo Inmobiliario",
+    "parking": "Parqueadero",
+    "loteamiento": "Loteamiento"
+  }
+}

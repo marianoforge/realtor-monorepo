@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "mobile:build:android": "cd apps/mobile && npx eas build --platform android --profile production",
+    "mobile:submit:android": "cd apps/mobile && npx eas submit --platform android --profile production --latest --track internal",
+    "mobile:build:ios": "cd apps/mobile && npx eas build --platform ios --profile production",
+    "mobile:submit:ios": "cd apps/mobile && npx eas submit --platform ios --profile production --latest --track internal"
   },
   "dependencies": {
     "@expo/metro-config": "*",

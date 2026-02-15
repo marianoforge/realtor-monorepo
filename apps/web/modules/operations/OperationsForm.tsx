@@ -124,9 +124,9 @@ const OperationsForm = () => {
   const userRole = userData?.role;
 
   const usersMapped = [
-    ...(teamMembers?.map((member: TeamMember) => ({
+    ...(teamMembers?.map((member) => ({
       name: `${member.firstName} ${member.lastName}`,
-      uid: member.id, // Siempre usar el ID del documento en teams para consistencia
+      uid: member.id,
     })) || []),
     ...(userUID
       ? [

@@ -4,6 +4,8 @@ import axios from "axios";
 import { useAuthStore } from "@gds-si/shared-stores";
 import { Operation, UserData } from "@gds-si/shared-types";
 
+import { extractApiData } from "@gds-si/shared-utils";
+
 export enum OfficeAdminQueryKeys {
   OFFICES_DATA = "officesData",
 }
@@ -34,9 +36,11 @@ const fetchOfficesData = async (): Promise<OfficesApiResponse> => {
     },
   });
 
+  const payload =
+    extractApiData<OfficesApiResponse>(response.data) ?? response.data;
   return {
-    operations: response.data.operations || [],
-    offices: response.data.offices || {},
+    operations: payload.operations || [],
+    offices: payload.offices || {},
   };
 };
 
