@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   UseFormRegister,
   FieldErrors,
@@ -10,7 +10,12 @@ import { DocumentTextIcon } from "@heroicons/react/24/outline";
 
 import Input from "@/components/PrivateComponente/FormComponents/Input";
 import Select from "@/components/PrivateComponente/FormComponents/Select";
-import { operationTypes, propertyTypes } from "@/lib/data";
+import { useI18nStore } from "@/stores";
+import {
+  getOperationTypeOptions,
+  getPropertyTypeOptions,
+  isRentalOperationType,
+} from "@gds-si/shared-i18n";
 
 import FormSectionWrapper from "./FormSectionWrapper";
 
@@ -35,13 +40,25 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
   sectionNumber = 1,
   className = "",
 }) => {
+  const t = useI18nStore((s) => s.t);
+  const operationTypeOptions = useMemo(
+    () => [
+      { value: "", label: "Selecciona el Tipo de Operación" },
+      ...getOperationTypeOptions(t),
+    ],
+    [t]
+  );
+  const propertyTypeOptions = useMemo(
+    () => [
+      { value: "", label: "Selecciona el Tipo de Inmueble" },
+      ...getPropertyTypeOptions(t),
+    ],
+    [t]
+  );
   const tipoOperacion = watch("tipo_operacion");
   const showPropertyType =
     tipoOperacion === "Venta" || tipoOperacion === "Compra";
-  const isAlquiler =
-    tipoOperacion === "Alquiler Tradicional" ||
-    tipoOperacion === "Alquiler Temporal" ||
-    tipoOperacion === "Alquiler Comercial";
+  const isAlquiler = isRentalOperationType(tipoOperacion);
 
   return (
     <FormSectionWrapper
@@ -60,7 +77,7 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
       />
 
       <Input
-        label="Fecha de Reserva / Promesa*"
+        label={`${t.operation.fecha_reserva_promesa}*`}
         type="date"
         defaultValue={formattedDate}
         {...register("fecha_reserva")}
@@ -82,7 +99,7 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
         label="Tipo de operación*"
         register={register}
         name="tipo_operacion"
-        options={operationTypes}
+        options={operationTypeOptions}
         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0077b6] focus:border-[#0077b6]"
         required
       />
@@ -98,7 +115,7 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
             label="Tipo de Inmueble*"
             register={register}
             name="tipo_inmueble"
-            options={propertyTypes}
+            options={propertyTypeOptions}
             className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0077b6] focus:border-[#0077b6]"
             required
           />
@@ -112,7 +129,7 @@ const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
 
       {isAlquiler && (
         <Input
-          label="Fecha de Vencimiento del Alquiler"
+          label={t.operation.rent_expiry_label}
           type="date"
           {...register("fecha_vencimiento_alquiler")}
           error={errors.fecha_vencimiento_alquiler?.message as string}

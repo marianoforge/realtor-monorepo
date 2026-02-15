@@ -30,7 +30,9 @@
       "@gds-si/shared-api": ["../../libs/shared-api/src/index.ts"],
       "@gds-si/shared-api/*": ["../../libs/shared-api/src/*"],
       "@gds-si/shared-hooks": ["../../libs/shared-hooks/src/index.ts"],
-      "@gds-si/shared-hooks/*": ["../../libs/shared-hooks/src/*"]
+      "@gds-si/shared-hooks/*": ["../../libs/shared-hooks/src/*"],
+      "@gds-si/shared-i18n": ["../../libs/shared-i18n/src/index.ts"],
+      "@gds-si/shared-i18n/*": ["../../libs/shared-i18n/src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

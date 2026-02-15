@@ -16,7 +16,7 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.gdssi.mobile",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": { "bundler": "metro", "favicon": "./assets/images/favicon.png" },
     "plugins": [

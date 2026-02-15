@@ -9,6 +9,8 @@ import {
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 
 import Input from "@/components/PrivateComponente/FormComponents/Input";
+import { useI18nStore } from "@/stores";
+import { isRentalOperationType } from "@gds-si/shared-i18n";
 
 import FormSectionWrapper from "./FormSectionWrapper";
 
@@ -33,31 +35,29 @@ const ValuesCommissionsSection: React.FC<ValuesCommissionsSectionProps> = ({
   sectionNumber = 3,
   className = "",
 }) => {
+  const t = useI18nStore((s) => s.t);
   const tipoOperacion = watch("tipo_operacion");
-  const isAlquiler =
-    tipoOperacion === "Alquiler Tradicional" ||
-    tipoOperacion === "Alquiler Temporal" ||
-    tipoOperacion === "Alquiler Comercial";
+  const isAlquiler = isRentalOperationType(tipoOperacion);
 
   const getLabelPuntaVendedora = () => {
     const labelText = isAlquiler
-      ? "Porcentaje punta propietario"
-      : "Porcentaje punta vendedora";
+      ? `Porcentaje ${t.party.side_owner.toLowerCase()}`
+      : `Porcentaje ${t.party.side_seller.toLowerCase()}`;
     return tipoOperacion === "Compra" ? labelText : `${labelText}*`;
   };
 
   const getLabelPuntaCompradora = () => {
     return isAlquiler
-      ? "Porcentaje punta inquilino*"
-      : "Porcentaje punta compradora*";
+      ? `Porcentaje ${t.party.side_tenant.toLowerCase()}*`
+      : `Porcentaje ${t.party.side_buyer.toLowerCase()}*`;
   };
 
   const getPuntaVendedoraLabel = () => {
-    return isAlquiler ? "Punta Propietario" : "Punta Vendedora";
+    return isAlquiler ? t.party.side_owner : t.party.side_seller;
   };
 
   const getPuntaCompradoraLabel = () => {
-    return isAlquiler ? "Punta Inquilino" : "Punta Compradora";
+    return isAlquiler ? t.party.side_tenant : t.party.side_buyer;
   };
 
   return (

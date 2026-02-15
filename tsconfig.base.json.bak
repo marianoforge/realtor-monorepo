@@ -30,9 +30,7 @@
       "@gds-si/shared-hooks": ["libs/shared-hooks/src/index.ts"],
       "@gds-si/shared-hooks/*": ["libs/shared-hooks/src/*"],
       "@gds-si/shared-assets": ["libs/shared-assets/src/index.ts"],
-      "@gds-si/shared-assets/*": ["libs/shared-assets/src/*"],
-      "@gds-si/shared-i18n": ["libs/shared-i18n/src/index.ts"],
-      "@gds-si/shared-i18n/*": ["libs/shared-i18n/src/*"]
+      "@gds-si/shared-assets/*": ["libs/shared-assets/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

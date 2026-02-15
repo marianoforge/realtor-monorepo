@@ -137,7 +137,7 @@ const AgentsTableRow: React.FC<AgentsTableRowProps> = ({
                 {member.firstName} {member.lastName}
               </p>
               {member.id === userId && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                <span className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 text-center whitespace-normal">
                   Team Leader
                 </span>
               )}

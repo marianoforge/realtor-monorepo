@@ -12,6 +12,7 @@ import ModalCancel from "@/components/PrivateComponente/CommonComponents/Modal";
 import ModalUpdate from "@/components/PrivateComponente/CommonComponents/Modal";
 import { QueryKeys } from "@gds-si/shared-utils";
 
+import type { SupportedLocale } from "@gds-si/shared-i18n";
 import {
   PersonalDataSection,
   AnnualReportSection,
@@ -38,6 +39,7 @@ const Settings = () => {
   const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   const [openModalCancel, setOpenModalCancel] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [locale, setLocale] = useState<SupportedLocale | "">("");
 
   const { data: userDataQuery, isLoading: isLoadingQuery } = useQuery({
     queryKey: ["userData", userID, "v2"],
@@ -104,6 +106,29 @@ const Settings = () => {
           : 0
       );
       setTokkoApiKey(userDataQuery.tokkoApiKey || "");
+      const savedLocale = userDataQuery.locale;
+      if (
+        savedLocale &&
+        ["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"].includes(savedLocale)
+      ) {
+        setLocale(savedLocale);
+      } else {
+        fetch("/api/geo/locale")
+          .then((res) => res.json())
+          .then((data) => {
+            if (
+              data?.locale &&
+              ["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"].includes(
+                data.locale
+              )
+            ) {
+              setLocale(data.locale);
+            } else {
+              setLocale("es-AR");
+            }
+          })
+          .catch(() => setLocale("es-AR"));
+      }
     }
   }, [userDataQuery]);
 
@@ -191,6 +216,11 @@ const Settings = () => {
           numeroTelefono: cleanString(numeroTelefono),
           objetivoAnual,
           tokkoApiKey: tokkoApiKey.trim() || null,
+          locale:
+            locale &&
+            ["es-AR", "es-CL", "es-CO", "es-UY", "es-PY"].includes(locale)
+              ? locale
+              : "es-AR",
           role: userRole,
         },
         {
@@ -268,6 +298,8 @@ const Settings = () => {
           setNumeroTelefono={setNumeroTelefono}
           objetivoAnual={objetivoAnual}
           setObjetivoAnual={setObjetivoAnual}
+          locale={locale}
+          setLocale={setLocale}
           onSubmit={handleUpdate}
         />
 

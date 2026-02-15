@@ -50,23 +50,37 @@ export function FormField({
   );
 }
 
+export interface FormPickerOption {
+  value: string;
+  label: string;
+}
+
 interface FormPickerProps {
   label: string;
   value: string;
-  options: string[];
+  options: FormPickerOption[] | string[];
   onSelect: (value: string) => void;
   error?: string;
   required?: boolean;
 }
 
+function normalizePickerOptions(
+  options: FormPickerOption[] | string[]
+): FormPickerOption[] {
+  return options.map((opt) =>
+    typeof opt === "string" ? { value: opt, label: opt } : opt
+  );
+}
+
 export function FormPicker({
   label,
   value,
-  options,
+  options: rawOptions,
   onSelect,
   error,
   required,
 }: FormPickerProps) {
+  const options = normalizePickerOptions(rawOptions);
   return (
     <View className="mb-3">
       <Text className="text-xs font-semibold text-gray-600 mb-1.5 ml-0.5">
@@ -76,20 +90,20 @@ export function FormPicker({
       <View className="flex-row flex-wrap gap-1.5">
         {options.map((opt) => (
           <TouchableOpacity
-            key={opt}
-            onPress={() => onSelect(opt)}
+            key={opt.value}
+            onPress={() => onSelect(opt.value)}
             className={`px-3 py-1.5 rounded-lg border ${
-              value === opt
+              value === opt.value
                 ? "bg-indigo-600 border-indigo-600"
                 : "bg-white border-gray-200"
             }`}
           >
             <Text
               className={`text-xs font-semibold ${
-                value === opt ? "text-white" : "text-gray-600"
+                value === opt.value ? "text-white" : "text-gray-600"
               }`}
             >
-              {opt}
+              {opt.label}
             </Text>
           </TouchableOpacity>
         ))}

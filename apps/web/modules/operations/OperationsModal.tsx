@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InferType } from "yup";
@@ -13,8 +13,12 @@ import { schema } from "@gds-si/shared-schemas/operationsFormSchema";
 import { updateOperation } from "@/lib/api/operationsApi";
 import { TeamMember, UserData } from "@gds-si/shared-types";
 import { useTeamMembers } from "@/common/hooks/useTeamMembers";
-import { useUserDataStore } from "@/stores/userDataStore";
-import { operationTypes, propertyTypes } from "@/lib/data";
+import { useUserDataStore, useI18nStore } from "@/stores";
+import {
+  getOperationTypeOptions,
+  getPropertyTypeOptions,
+  isRentalOperationType,
+} from "@gds-si/shared-i18n";
 import Toast, {
   useToast,
 } from "@/components/PrivateComponente/CommonComponents/Toast";
@@ -86,6 +90,21 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const queryClient = useQueryClient();
+  const t = useI18nStore((s) => s.t);
+  const operationTypeOptions = useMemo(
+    () => [
+      { value: "", label: "Selecciona el Tipo de Operación" },
+      ...getOperationTypeOptions(t),
+    ],
+    [t]
+  );
+  const propertyTypeOptions = useMemo(
+    () => [
+      { value: "", label: "Selecciona el Tipo de Inmueble" },
+      ...getPropertyTypeOptions(t),
+    ],
+    [t]
+  );
   const { data: teamMembers, isLoading: isTeamMembersLoading } =
     useTeamMembers();
   const { userData } = useUserDataStore();
@@ -120,10 +139,7 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
   const isTeamLeaderBroker = userRole === UserRole.TEAM_LEADER_BROKER;
 
   const tipoOperacion = watch("tipo_operacion");
-  const isAlquiler =
-    tipoOperacion === "Alquiler Tradicional" ||
-    tipoOperacion === "Alquiler Temporal" ||
-    tipoOperacion === "Alquiler Comercial";
+  const isAlquiler = isRentalOperationType(tipoOperacion);
 
   useEffect(() => {
     if (operation && isOpen) {
@@ -421,7 +437,7 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                       error={errors.fecha_captacion?.message}
                     />
                     <Input
-                      label="Fecha de Reserva / Promesa*"
+                      label={`${t.operation.fecha_reserva_promesa}*`}
                       type="date"
                       {...register("fecha_reserva")}
                       error={errors.fecha_reserva?.message}
@@ -438,7 +454,7 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                     <div>
                       <Select
                         label="Tipo de Operación*"
-                        options={operationTypes}
+                        options={operationTypeOptions}
                         register={register}
                         name="tipo_operacion"
                         error={errors.tipo_operacion?.message}
@@ -454,7 +470,7 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                       <div>
                         <Select
                           label="Tipo de Inmueble*"
-                          options={propertyTypes}
+                          options={propertyTypeOptions}
                           register={register}
                           name="tipo_inmueble"
                           error={errors.tipo_inmueble?.message}
@@ -468,7 +484,7 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                     )}
                     {isAlquiler && (
                       <Input
-                        label="Fecha de Vencimiento del Alquiler"
+                        label={t.operation.rent_expiry_label}
                         type="date"
                         {...register("fecha_vencimiento_alquiler")}
                         error={errors.fecha_vencimiento_alquiler?.message}
@@ -562,8 +578,8 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                     <Input
                       label={
                         isAlquiler
-                          ? "Porcentaje Punta Inquilino*"
-                          : "Porcentaje Punta Compradora*"
+                          ? `Porcentaje ${t.party.side_tenant}*`
+                          : `Porcentaje ${t.party.side_buyer}*`
                       }
                       type="text"
                       {...register("porcentaje_punta_compradora", {
@@ -575,10 +591,10 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                     <Input
                       label={
                         isAlquiler
-                          ? "Porcentaje Punta Propietario*"
+                          ? `Porcentaje ${t.party.side_owner}*`
                           : tipoOperacion === "Compra"
-                            ? "Porcentaje Punta Vendedora"
-                            : "Porcentaje Punta Vendedora*"
+                            ? `Porcentaje ${t.party.side_seller}`
+                            : `Porcentaje ${t.party.side_seller}*`
                       }
                       type="text"
                       {...register("porcentaje_punta_vendedora", {
@@ -609,7 +625,9 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                           className="w-4 h-4 text-[#0077b6] border-gray-300 rounded"
                         />
                         <span className="text-gray-700">
-                          {isAlquiler ? "Punta Propietario" : "Punta Vendedora"}
+                          {isAlquiler
+                            ? t.party.side_owner
+                            : t.party.side_seller}
                         </span>
                       </label>
                       <label className="flex items-center gap-2">
@@ -619,7 +637,9 @@ const OperationsModal: React.FC<OperationsModalProps> = ({
                           className="w-4 h-4 text-[#0077b6] border-gray-300 rounded"
                         />
                         <span className="text-gray-700">
-                          {isAlquiler ? "Punta Inquilino" : "Punta Compradora"}
+                          {isAlquiler
+                            ? t.party.side_tenant
+                            : t.party.side_buyer}
                         </span>
                       </label>
                     </div>

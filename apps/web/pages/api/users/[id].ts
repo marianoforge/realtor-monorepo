@@ -101,6 +101,7 @@ export default async function handler(
         objetivoAnual,
         objetivosAnuales,
         tokkoApiKey,
+        locale,
       } = validation.data;
 
       // También permitir campos adicionales que no están en el schema de perfil
@@ -119,6 +120,7 @@ export default async function handler(
         ...(stripeSubscriptionId !== undefined && { stripeSubscriptionId }),
         ...(priceId !== undefined && { priceId }),
         ...(tokkoApiKey !== undefined && { tokkoApiKey }),
+        ...(locale !== undefined && { locale }),
         updatedAt: new Date().toISOString(),
       };
 
