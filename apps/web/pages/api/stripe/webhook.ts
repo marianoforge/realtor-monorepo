@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { adminAuth, db } from "@/lib/firebaseAdmin";
+import { buffer } from "micro";
+import { db } from "@/lib/firebaseAdmin";
 import { PRICE_ID_GROWTH, PRICE_ID_GROWTH_ANNUAL } from "@/lib/data";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -8,16 +9,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
-
-const getRawBody = async (req: NextApiRequest): Promise<Buffer> => {
-  const chunks: Buffer[] = [];
-
-  return new Promise((resolve, reject) => {
-    req.on("data", (chunk) => chunks.push(chunk));
-    req.on("end", () => resolve(Buffer.concat(chunks)));
-    req.on("error", reject);
-  });
-};
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,7 +32,7 @@ export default async function handler(
   }
 
   try {
-    const rawBody = await getRawBody(req);
+    const rawBody = await buffer(req);
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
     if (event.type === "customer.subscription.deleted") {
       const subscription = event.data.object as Stripe.Subscription;
@@ -173,12 +164,74 @@ export default async function handler(
       }
     } else if (event.type === "checkout.session.completed") {
       const session = event.data.object as any;
-      const customerId = session.customer;
-      const subscriptionId = session.subscription;
+      const customerId =
+        typeof session.customer === "string"
+          ? session.customer
+          : session.customer?.id;
+      const subscriptionId =
+        typeof session.subscription === "string"
+          ? session.subscription
+          : session.subscription?.id;
       const userIdFromMetadata = session.metadata?.userId;
       const fromTrial = session.metadata?.fromTrial === "true";
       const fromRegistration = session.metadata?.fromRegistration === "true";
-      const customerEmail = session.customer_details?.email;
+      let customerEmail: string | undefined =
+        session.customer_details?.email ?? session.customer_email;
+      if (!customerEmail && customerId) {
+        try {
+          const customer = await stripe.customers.retrieve(
+            customerId as string
+          );
+          if (!customer.deleted && "email" in customer && customer.email) {
+            customerEmail = customer.email;
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      console.log("[webhook] checkout.session.completed:", {
+        customerId,
+        subscriptionId,
+        userIdFromMetadata,
+        fromTrial,
+        fromRegistration,
+        customerEmail,
+        paymentStatus: session.payment_status,
+        mode: session.mode,
+      });
+
+      const resolveRole = async (
+        subId: string | undefined
+      ): Promise<string | undefined> => {
+        if (!subId) return undefined;
+        try {
+          const sub = await stripe.subscriptions.retrieve(subId);
+          const priceId = sub.items?.data?.[0]?.price?.id;
+          if (
+            priceId === PRICE_ID_GROWTH ||
+            priceId === PRICE_ID_GROWTH_ANNUAL
+          ) {
+            return "team_leader_broker";
+          }
+          if (priceId) return "agente_asesor";
+        } catch {
+          // ignore
+        }
+        return undefined;
+      };
+
+      const resolveSubscriptionStatus = async (
+        subId: string | undefined
+      ): Promise<string> => {
+        if (!subId) return "active";
+        try {
+          const sub = await stripe.subscriptions.retrieve(subId);
+          return sub.status;
+        } catch {
+          return "active";
+        }
+      };
 
       try {
         if (fromRegistration && userIdFromMetadata) {
@@ -186,101 +239,126 @@ export default async function handler(
           const userDoc = await userRef.get();
 
           if (userDoc.exists) {
-            let subscriptionStatus = "active";
-            let role: string | undefined = undefined;
-            if (subscriptionId) {
-              const subscription = await stripe.subscriptions.retrieve(
-                subscriptionId as string
-              );
-              subscriptionStatus = subscription.status;
-
-              const priceId = subscription.items?.data?.[0]?.price?.id;
-              if (
-                priceId === PRICE_ID_GROWTH ||
-                priceId === PRICE_ID_GROWTH_ANNUAL
-              ) {
-                role = "team_leader_broker";
-              } else if (priceId) {
-                role = "agente_asesor";
-              }
-            }
+            const subscriptionStatus =
+              await resolveSubscriptionStatus(subscriptionId);
+            const role = await resolveRole(subscriptionId);
 
             const updateData: any = {
               stripeCustomerId: customerId,
-              stripeSubscriptionId: subscriptionId,
-              subscriptionStatus: subscriptionStatus,
+              stripeSubscriptionId: subscriptionId ?? null,
+              subscriptionStatus,
               registrationCheckoutCompletedAt: new Date().toISOString(),
             };
 
-            if (role) {
-              updateData.role = role;
-            }
-
+            if (role) updateData.role = role;
             await userRef.update(updateData);
+            console.log(
+              "[webhook] Updated user (fromRegistration):",
+              userIdFromMetadata
+            );
           }
         } else if (fromTrial && userIdFromMetadata) {
           const userRef = db.collection("usuarios").doc(userIdFromMetadata);
 
-          let role: string | undefined = undefined;
-          if (subscriptionId) {
-            try {
-              const subscription = await stripe.subscriptions.retrieve(
-                subscriptionId as string
-              );
-              const priceId = subscription.items?.data?.[0]?.price?.id;
-              if (
-                priceId === PRICE_ID_GROWTH ||
-                priceId === PRICE_ID_GROWTH_ANNUAL
-              ) {
-                role = "team_leader_broker";
-              } else if (priceId) {
-                role = "agente_asesor";
-              }
-            } catch {
-              // No se pudo obtener priceId desde suscripción
-            }
-          }
-
+          const role = await resolveRole(subscriptionId);
           const updateData: any = {
             stripeCustomerId: customerId,
-            stripeSubscriptionId: subscriptionId,
+            stripeSubscriptionId: subscriptionId ?? null,
             subscriptionStatus: "active",
             trialConvertedAt: new Date().toISOString(),
           };
 
-          if (role) {
-            updateData.role = role;
-          }
-
+          if (role) updateData.role = role;
           await userRef.update(updateData);
-        } else if (customerId && subscriptionId && customerEmail) {
-          const userQuery = db
-            .collection("usuarios")
-            .where("email", "==", customerEmail);
-          const snapshot = await userQuery.get();
-
-          if (!snapshot.empty) {
+          console.log(
+            "[webhook] Updated user (fromTrial):",
+            userIdFromMetadata
+          );
+        } else if (customerId) {
+          const updateMatchedDocs = async (
+            docs: FirebaseFirestore.QueryDocumentSnapshot[],
+            matchType: string
+          ) => {
             await Promise.all(
-              snapshot.docs.map(async (doc) => {
+              docs.map(async (doc) => {
                 const userData = doc.data();
+                const subscriptionStatus = subscriptionId
+                  ? await resolveSubscriptionStatus(subscriptionId)
+                  : "active";
+                const role = await resolveRole(subscriptionId);
 
                 const updateData: any = {
                   stripeCustomerId: customerId,
-                  stripeSubscriptionId: subscriptionId,
-                  subscriptionStatus: "active",
+                  subscriptionStatus,
                 };
-
-                if (userData.subscriptionStatus === "trialing") {
+                if (subscriptionId)
+                  updateData.stripeSubscriptionId = subscriptionId;
+                if (role) updateData.role = role;
+                if (
+                  userData.subscriptionStatus === "trialing" ||
+                  userData.subscriptionStatus === "pending_payment"
+                ) {
                   updateData.trialConvertedAt = new Date().toISOString();
                 }
 
                 await doc.ref.update(updateData);
+                console.log(`[webhook] Updated user (${matchType}):`, doc.id);
               })
             );
+          };
+
+          let matched = false;
+
+          if (customerEmail) {
+            const emailSnap = await db
+              .collection("usuarios")
+              .where("email", "==", customerEmail)
+              .get();
+            if (!emailSnap.empty) {
+              await updateMatchedDocs(emailSnap.docs, "email");
+              matched = true;
+            } else {
+              const lowerEmail = customerEmail.toLowerCase();
+              if (lowerEmail !== customerEmail) {
+                const lowerSnap = await db
+                  .collection("usuarios")
+                  .where("email", "==", lowerEmail)
+                  .get();
+                if (!lowerSnap.empty) {
+                  await updateMatchedDocs(lowerSnap.docs, "email-lowercase");
+                  matched = true;
+                }
+              }
+            }
           }
+
+          if (!matched && session.id) {
+            const sessionSnap = await db
+              .collection("usuarios")
+              .where("sessionId", "==", session.id)
+              .get();
+            if (!sessionSnap.empty) {
+              await updateMatchedDocs(sessionSnap.docs, "sessionId");
+              matched = true;
+            }
+          }
+
+          if (!matched) {
+            console.warn(
+              "[webhook] checkout.session.completed: no user found",
+              { customerEmail, sessionId: session.id }
+            );
+          }
+        } else {
+          console.warn("[webhook] checkout.session.completed: no match", {
+            hasCustomerId: !!customerId,
+            hasSubscriptionId: !!subscriptionId,
+            hasEmail: !!customerEmail,
+            hasMetadata: !!userIdFromMetadata,
+          });
         }
       } catch (error) {
-        console.error("Error processing checkout completion:", error);
+        console.error("[webhook] Error processing checkout completion:", error);
         return res.status(200).json({
           received: true,
           status: "error_processing_checkout",

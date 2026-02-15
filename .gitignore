@@ -63,9 +63,9 @@ cache/
 # Sentry Config File
 .env.sentry-build-plugin
 
-# Debug scripts (local debugging tools)
+# Debug scripts (local debugging tools, root scripts only)
 scripts/debug/
-scripts
+/scripts
 
 # Generated documentation files
 docs/
