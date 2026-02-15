@@ -1,18 +1,8 @@
 {
   "build": {
     "production": {
-      "android": {
-        "buildType": "app-bundle"
-      },
+      "android": { "buildType": "app-bundle" },
       "env": {
-        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCTeeIYcE7YBLFzTnqtOd-78EZ6kic6RXY",
-        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "gds-si.firebaseapp.com",
-        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "gds-si",
-        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "gds-si.appspot.com",
-        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "342233680729",
-        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:342233680729:web:61230ada1e5b7737621a48",
-        "EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-1917CJGN9D",
-        "EXPO_PUBLIC_FIREBASE_VAPID_KEY": "BAJYaYfds02mXOkdWlg70vxOY0QgRQCtLNk6Iejujg8qHzJXEJulfsTTlYugPw67sGJEz18KpfrOs410EeC3HYg",
         "EXPO_PUBLIC_API_URL": "https://realtor-monorepo.vercel.app"
       }
     },
@@ -22,15 +12,9 @@
     },
     "preview": {
       "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
-      "android": {
-        "buildType": "apk"
-      }
+      "ios": { "simulator": true },
+      "android": { "buildType": "apk" }
     }
   },
-  "submit": {
-    "production": {}
-  }
+  "submit": { "production": {} }
 }
