@@ -54,8 +54,25 @@ export default function Success() {
           extractApiData<SessionType>(sessionResponse);
         console.log("✅ Sesión de Stripe obtenida:", session.id);
 
-        // 🔹 PASO 2: Obtener el email y buscar el usuario real en Firebase Auth
-        const email = session.customer_details.email;
+        const rawSession = session as SessionType & {
+          customer_email?: string;
+          customer?: { id: string; email?: string };
+        };
+        const email =
+          rawSession.customer_details?.email ??
+          rawSession.customer_email ??
+          (typeof rawSession.customer === "object" &&
+          rawSession.customer &&
+          "email" in rawSession.customer
+            ? (rawSession.customer as { email: string }).email
+            : null);
+        if (!email) {
+          setError(
+            "No se pudo obtener el email del pago. Contactá soporte para actualizar tu suscripción."
+          );
+          setIsLoading(false);
+          return;
+        }
         console.log("📧 Email:", email);
 
         // Buscar el UID REAL del usuario por email desde Firebase Auth (no confiar en metadata)
