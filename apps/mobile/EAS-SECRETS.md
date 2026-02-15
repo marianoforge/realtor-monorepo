@@ -1,24 +1,30 @@
 # EAS Secrets (mobile build)
 
-Las credenciales de Firebase y la API ya no van en `eas.json`. Hay que configurarlas como **EAS Secrets** para que el build de producción tenga las variables.
+Las credenciales de Firebase ya no van en `eas.json`. Se usan **dos API keys** (una restringida a Android, otra a iOS) y el resto de variables en EAS. El build elige la key según la plataforma.
 
-## Configurar secrets en EAS
+## Variables por plataforma
 
-Desde la raíz del monorepo:
+- **Android:** `EXPO_PUBLIC_FIREBASE_API_KEY_ANDROID` → key de Google Cloud con restricción "Android apps".
+- **iOS:** `EXPO_PUBLIC_FIREBASE_API_KEY_IOS` → key de Google Cloud con restricción "iOS apps".
+- **Web:** key propia con restricción "Websites" en Vercel y `.env.local` (no EAS).
 
-```bash
-cd apps/mobile
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_API_KEY --value "tu-api-key" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN --value "gds-si.firebaseapp.com" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_PROJECT_ID --value "gds-si" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET --value "gds-si.appspot.com" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID --value "342233680729" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_APP_ID --value "1:342233680729:web:61230ada1e5b7737621a48" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID --value "G-1917CJGN9D" --type string
-npx eas secret:create --name EXPO_PUBLIC_FIREBASE_VAPID_KEY --value "tu-vapid-key" --type string
-```
+## Configurar en EAS
 
-O desde el dashboard: [expo.dev](https://expo.dev) → tu proyecto → Secrets.
+En [expo.dev](https://expo.dev) → tu proyecto → **Environment variables**, agregar:
+
+| Nombre                                     | Uso           | Valor                                       |
+| ------------------------------------------ | ------------- | ------------------------------------------- |
+| `EXPO_PUBLIC_FIREBASE_API_KEY_ANDROID`     | Build Android | Key restringida a Android (package + SHA-1) |
+| `EXPO_PUBLIC_FIREBASE_API_KEY_IOS`         | Build iOS     | Key restringida a iOS (Bundle ID)           |
+| `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN`         | Ambas         | `gds-si.firebaseapp.com`                    |
+| `EXPO_PUBLIC_FIREBASE_PROJECT_ID`          | Ambas         | `gds-si`                                    |
+| `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET`      | Ambas         | `gds-si.appspot.com`                        |
+| `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Ambas         | `342233680729`                              |
+| `EXPO_PUBLIC_FIREBASE_APP_ID`              | Ambas         | `1:342233680729:web:61230ada1e5b7737621a48` |
+| `EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID`      | Ambas         | `G-1917CJGN9D`                              |
+| `EXPO_PUBLIC_FIREBASE_VAPID_KEY`           | Ambas         | Tu VAPID key                                |
+
+El código en `src/lib/firebase.ts` usa `EXPO_PUBLIC_FIREBASE_API_KEY_ANDROID` en builds Android y `EXPO_PUBLIC_FIREBASE_API_KEY_IOS` en builds iOS.
 
 ## Si Google avisó que la API key estaba expuesta
 
