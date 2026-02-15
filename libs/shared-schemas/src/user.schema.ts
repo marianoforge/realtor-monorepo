@@ -27,7 +27,9 @@ export const subscriptionStatusEnum = z.enum([
   "past_due",
   "pending_payment",
   "unpaid",
+  "incomplete",
   "incomplete_expired",
+  "paused",
 ]);
 
 /**
