@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { TeamMember } from "@gds-si/shared-types";
 import { useAuthStore } from "@gds-si/shared-stores";
-
-import { QueryKeys } from "@gds-si/shared-utils";
+import { extractApiData, QueryKeys } from "@gds-si/shared-utils";
 
 const fetchTeamMembers = async (
   teamLeadID: string
@@ -22,7 +20,8 @@ const fetchTeamMembers = async (
     throw new Error(`Error fetching team members: ${response.statusText}`);
   }
 
-  return response.json();
+  const body = await response.json();
+  return extractApiData<{ membersWithOperations: TeamMember[] }>(body) ?? body;
 };
 
 export const useTeamMembersOps = (teamLeadID: string) => {

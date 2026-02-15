@@ -37,9 +37,7 @@ interface IncomeAgent {
 const IncomeAgentsList = () => {
   const userUID = useUserAuth();
   const { data: teamMembers } = useTeamMembers();
-  const teamMemberIds = teamMembers
-    ?.map((member: { id: string }) => member.id)
-    .filter(Boolean);
+  const teamMemberIds = teamMembers?.map((member) => member.id).filter(Boolean);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [yearFilter, setYearFilter] = useState(new Date().getFullYear());

@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+import { TeamMember } from "@gds-si/shared-types";
 import { useAuthStore } from "@gds-si/shared-stores";
 
-import { QueryKeys } from "@gds-si/shared-utils";
+import { extractApiData, QueryKeys } from "@gds-si/shared-utils";
 
 export const useTeamMembers = () => {
   const { userID } = useAuthStore();
 
-  const fetchTeamMembers = async () => {
+  const fetchTeamMembers = async (): Promise<TeamMember[]> => {
     const token = await useAuthStore.getState().getAuthToken();
     if (!token) throw new Error("User not authenticated");
 
@@ -16,11 +17,11 @@ export const useTeamMembers = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    const teamMembers = response.data.teamMembers.filter(
-      (member: { teamLeadID: string | null }) => member.teamLeadID === userID
+    const payload = extractApiData<{ teamMembers: TeamMember[] }>(
+      response.data
     );
-
-    return teamMembers;
+    const list = payload?.teamMembers ?? [];
+    return list.filter((member) => member.teamLeadID === userID);
   };
 
   const query = useQuery({
