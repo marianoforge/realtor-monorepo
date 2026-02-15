@@ -131,6 +131,7 @@ export default function DashboardScreen() {
                 nonExclusivityPercentage={metrics.nonExclusivityPercentage}
                 totalOps={metrics.totalExclusivityOps}
                 year={metrics.effectiveYear}
+                unspecifiedCount={metrics.unspecifiedExclusivityCount}
               />
 
               <GrossFeePercentageSection

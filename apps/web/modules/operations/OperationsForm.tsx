@@ -563,6 +563,7 @@ const OperationsForm = () => {
                   errors={errors}
                   watch={watch}
                   trigger={trigger}
+                  setValue={setValue}
                   formattedDate={formattedDate}
                   sectionNumber={1}
                 />

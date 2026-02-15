@@ -154,19 +154,27 @@ export const conteoExplusividad = (operations: Operation[]) => {
   const operacionesNoExclusivas = operations.filter(
     (op: Operation) => op.exclusiva === false && op.no_exclusiva === true
   );
+  const operacionesSinEspecificar = operations.filter(
+    (op: Operation) =>
+      !(op.exclusiva === true && op.no_exclusiva === false) &&
+      !(op.exclusiva === false && op.no_exclusiva === true)
+  );
   const totalOperaciones =
     operacionesExclusivas.length + operacionesNoExclusivas.length;
-  const porcentajeExclusividad =
-    (operacionesExclusivas.length / totalOperaciones) * 100;
-  const porcentajeNoExclusividad =
-    (operacionesNoExclusivas.length / totalOperaciones) * 100;
-
   const cantidadExclusivas = operacionesExclusivas.length;
   const cantidadNoExclusivas = operacionesNoExclusivas.length;
+  const cantidadSinEspecificar = operacionesSinEspecificar.length;
+  const porcentajeExclusividad =
+    totalOperaciones > 0 ? (cantidadExclusivas / totalOperaciones) * 100 : 0;
+  const porcentajeNoExclusividad =
+    totalOperaciones > 0 ? (cantidadNoExclusivas / totalOperaciones) * 100 : 0;
+
   return {
     operacionesExclusivas,
     operacionesNoExclusivas,
+    operacionesSinEspecificar,
     totalOperaciones,
+    cantidadSinEspecificar,
     porcentajeExclusividad,
     porcentajeNoExclusividad,
     cantidadExclusivas,

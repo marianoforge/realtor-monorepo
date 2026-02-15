@@ -97,6 +97,7 @@ export interface DashboardMetrics {
   exclusivityPercentage: number;
   nonExclusivityPercentage: number;
   totalExclusivityOps: number;
+  unspecifiedExclusivityCount: number;
 
   propertyTypes: CategoryItem[];
   totalPropertyOps: number;
@@ -541,6 +542,7 @@ export function useDashboardMetrics() {
       exclusivityPercentage: exclusivity.porcentajeExclusividad || 0,
       nonExclusivityPercentage: exclusivity.porcentajeNoExclusividad || 0,
       totalExclusivityOps: exclusivity.totalOperaciones,
+      unspecifiedExclusivityCount: exclusivity.cantidadSinEspecificar ?? 0,
       propertyTypes,
       totalPropertyOps: ventasCompras.length,
       sharedCount: shared.length,

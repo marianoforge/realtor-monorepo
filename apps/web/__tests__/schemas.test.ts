@@ -145,7 +145,7 @@ describe("Schemas de Validación - Operation", () => {
       }
     });
 
-    it("debe rechazar operación sin exclusiva o noExclusiva", () => {
+    it("debe aceptar operación sin exclusividad (exclusiva y no_exclusiva no marcadas)", () => {
       const operation = {
         teamId: "test-team-id",
         user_uid: "test-user-id",
@@ -153,10 +153,13 @@ describe("Schemas de Validación - Operation", () => {
         tipo_operacion: "Venta",
         tipo_inmueble: "Casa",
         valor_reserva: 100000,
+        estado: "En Curso",
+        exclusiva: false,
+        no_exclusiva: false,
       };
 
       const result = createOperationSchema.safeParse(operation);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
     it("debe rechazar operación de Venta sin tipo_inmueble", () => {

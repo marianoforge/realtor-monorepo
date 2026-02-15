@@ -24,6 +24,7 @@ import {
   FormField,
   FormPicker,
   FormCheckbox,
+  FormRadioGroup,
   FormDateField,
 } from "../../components/operations/FormField";
 
@@ -201,8 +202,6 @@ function validate(form: FormState): FormErrors {
     errors.tipo_operacion = "Tipo de operación requerido";
   if (!form.valor_reserva || Number(form.valor_reserva) <= 0)
     errors.valor_reserva = "Valor debe ser mayor a 0";
-  if (!form.exclusiva && !form.no_exclusiva)
-    errors.exclusiva = "Seleccioná exclusiva o no exclusiva";
   if (
     (form.tipo_operacion === "Venta" || form.tipo_operacion === "Compra") &&
     !form.tipo_inmueble
@@ -214,7 +213,7 @@ function validate(form: FormState): FormErrors {
 export default function OperationFormScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const router = useRouter();
-  const { operations, refetch } = useOperations();
+  const { operations, refetch, isLoading: isLoadingOps } = useOperations();
   const { userID } = useAuthContext();
 
   const existingOp = useMemo(
@@ -230,6 +229,9 @@ export default function OperationFormScreen() {
   useEffect(() => {
     if (existingOp) setForm(initFormState(existingOp));
   }, [existingOp]);
+
+  const isLoadingEdit = Boolean(id && isLoadingOps);
+  const notFoundEdit = Boolean(id && !isLoadingOps && !existingOp);
 
   const updateField = <K extends keyof FormState>(
     key: K,
@@ -325,6 +327,42 @@ export default function OperationFormScreen() {
     }
   };
 
+  if (isLoadingEdit) {
+    return (
+      <View className="flex-1 bg-background">
+        <Stack.Screen options={{ headerShown: false }} />
+        <AppHeader subtitle="Editar Operación" />
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color="#4f46e5" />
+          <Text className="text-gray-500 mt-3">Cargando operación...</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (notFoundEdit) {
+    return (
+      <View className="flex-1 bg-background">
+        <Stack.Screen options={{ headerShown: false }} />
+        <AppHeader subtitle="Editar Operación" />
+        <View className="flex-1 items-center justify-center p-6">
+          <Ionicons name="alert-circle-outline" size={48} color="#ef4444" />
+          <Text className="text-gray-600 font-semibold mt-3 text-center">
+            Operación no encontrada
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.replace("/(tabs)/operations")}
+            className="mt-4 bg-indigo-600 px-5 py-2.5 rounded-xl"
+          >
+            <Text className="text-white font-semibold text-sm">
+              Volver a operaciones
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 bg-background">
       <Stack.Screen options={{ headerShown: false }} />
@@ -373,23 +411,24 @@ export default function OperationFormScreen() {
               onSelect={(v) => updateField("estado", v)}
             />
 
-            <View className="flex-row gap-4 mb-2">
-              <FormCheckbox
-                label="Exclusiva"
-                checked={form.exclusiva}
-                onToggle={() => updateField("exclusiva", !form.exclusiva)}
-              />
-              <FormCheckbox
-                label="No Exclusiva"
-                checked={form.no_exclusiva}
-                onToggle={() => updateField("no_exclusiva", !form.no_exclusiva)}
-              />
-            </View>
-            {errors.exclusiva ? (
-              <Text className="text-xs text-red-500 mb-2">
-                {errors.exclusiva}
-              </Text>
-            ) : null}
+            <FormRadioGroup
+              label="Exclusividad de la Operación"
+              value={
+                form.exclusiva
+                  ? "exclusiva"
+                  : form.no_exclusiva
+                    ? "no_exclusiva"
+                    : null
+              }
+              options={[
+                { value: "exclusiva", label: "Exclusiva" },
+                { value: "no_exclusiva", label: "No Exclusiva" },
+              ]}
+              onSelect={(v) => {
+                updateField("exclusiva", v === "exclusiva");
+                updateField("no_exclusiva", v === "no_exclusiva");
+              }}
+            />
           </View>
 
           <View className="bg-white rounded-xl border border-gray-100 p-4 mb-4">

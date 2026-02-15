@@ -228,27 +228,6 @@ const operationBaseSchema = z.object({
 });
 
 /**
- * Validación de exclusividad (al menos uno debe estar marcado)
- */
-const exclusividadRefinement = <
-  T extends {
-    exclusiva?: boolean | "N/A" | null;
-    no_exclusiva?: boolean | "N/A" | null;
-  },
->(
-  data: T
-) => {
-  const exclusiva = data.exclusiva === true;
-  const noExclusiva = data.no_exclusiva === true;
-  return exclusiva || noExclusiva;
-};
-
-const exclusividadRefinementError = {
-  message: "Debe seleccionar si la operación es exclusiva o no exclusiva",
-  path: ["exclusiva"],
-};
-
-/**
  * Validación de tipo de inmueble (requerido para Venta o Compra)
  */
 const tipoInmuebleRefinement = <
@@ -283,7 +262,6 @@ export const createOperationSchema = operationBaseSchema
     user_uid: commonSchemas.userUid.optional(),
     user_uid_adicional: z.string().nullable().optional(),
   })
-  .refine(exclusividadRefinement, exclusividadRefinementError)
   .refine(tipoInmuebleRefinement, tipoInmuebleRefinementError);
 
 /**

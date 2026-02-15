@@ -102,28 +102,8 @@ export const schema = yup.object().shape({
         return true;
       }
     ),
-  exclusiva: yup
-    .boolean()
-    .test(
-      "exclusividad-requerida",
-      "Debe seleccionar si la operación es exclusiva o no exclusiva",
-      function (value) {
-        const noExclusiva = this.parent.no_exclusiva;
-        // Al menos uno debe estar marcado
-        return value === true || noExclusiva === true;
-      }
-    ),
-  no_exclusiva: yup
-    .boolean()
-    .test(
-      "exclusividad-requerida",
-      "Debe seleccionar si la operación es exclusiva o no exclusiva",
-      function (value) {
-        const exclusiva = this.parent.exclusiva;
-        // Al menos uno debe estar marcado
-        return value === true || exclusiva === true;
-      }
-    ),
+  exclusiva: yup.boolean(),
+  no_exclusiva: yup.boolean(),
   numero_sobre_reserva: yup.string().nullable(),
   numero_sobre_refuerzo: yup.string().nullable(),
   monto_sobre_reserva: yup

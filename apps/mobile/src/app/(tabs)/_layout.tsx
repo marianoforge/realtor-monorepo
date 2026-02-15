@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { UserRole } from "@gds-si/shared-utils";
 import { useAuthContext } from "../../lib/AuthContext";
 import { usePushNotifications } from "../../hooks/usePushNotifications";
@@ -8,6 +9,7 @@ export default function TabsLayout() {
   const { userID, role } = useAuthContext();
   usePushNotifications(userID);
   const isTeamLeader = role === UserRole.TEAM_LEADER_BROKER;
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -19,8 +21,8 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: "#ffffff",
           borderTopColor: "#e5e7eb",
-          paddingBottom: 4,
-          height: 56,
+          paddingBottom: Math.max(insets.bottom, 4),
+          height: 56 + insets.bottom,
         },
       }}
     >

@@ -7,6 +7,7 @@ interface Props {
   nonExclusivityPercentage: number;
   totalOps: number;
   year: number;
+  unspecifiedCount?: number;
 }
 
 export default function ExclusivitySection({
@@ -16,6 +17,7 @@ export default function ExclusivitySection({
   nonExclusivityPercentage,
   totalOps,
   year,
+  unspecifiedCount = 0,
 }: Props) {
   const pctE = isNaN(exclusivityPercentage) ? 0 : exclusivityPercentage;
   const pctNE = isNaN(nonExclusivityPercentage) ? 0 : nonExclusivityPercentage;
@@ -89,6 +91,14 @@ export default function ExclusivitySection({
           />
         </View>
       </View>
+
+      {unspecifiedCount > 0 && (
+        <Text className="text-xs text-slate-500 text-center mt-2">
+          {unspecifiedCount}{" "}
+          {unspecifiedCount === 1 ? "operación" : "operaciones"} sin
+          exclusividad asignada
+        </Text>
+      )}
     </View>
   );
 }

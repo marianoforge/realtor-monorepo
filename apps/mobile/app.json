@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "GDS SI",
+    "name": "Realtor TrackPro",
     "slug": "gds-si-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.gdssi.mobile"
+      "package": "com.gdssi.mobile",
+      "versionCode": 4
     },
     "web": { "bundler": "metro", "favicon": "./assets/images/favicon.png" },
     "plugins": [

@@ -304,8 +304,9 @@ describe("calculationsPrincipal.ts", () => {
       expect(result.cantidadExclusivas).toBe(0);
       expect(result.cantidadNoExclusivas).toBe(0);
       expect(result.totalOperaciones).toBe(0);
-      expect(result.porcentajeExclusividad).toBeNaN();
-      expect(result.porcentajeNoExclusividad).toBeNaN();
+      expect(result.cantidadSinEspecificar).toBe(0);
+      expect(result.porcentajeExclusividad).toBe(0);
+      expect(result.porcentajeNoExclusividad).toBe(0);
     });
   });
 

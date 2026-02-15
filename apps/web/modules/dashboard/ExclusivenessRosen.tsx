@@ -64,6 +64,7 @@ const ExclusivenessRosen = () => {
     porcentajeNoExclusividad,
     cantidadExclusivas,
     cantidadNoExclusivas,
+    cantidadSinEspecificar,
   } = conteoExplusividad(currentYearOperations);
 
   const pieChartData = useMemo(() => {
@@ -131,18 +132,32 @@ const ExclusivenessRosen = () => {
           <p className="text-center text-gray-500">
             No existen operaciones con exclusividad asignada
           </p>
+          {cantidadSinEspecificar > 0 && (
+            <p className="text-center text-gray-400 text-sm mt-1">
+              {cantidadSinEspecificar}{" "}
+              {cantidadSinEspecificar === 1 ? "operación" : "operaciones"} sin
+              especificar
+            </p>
+          )}
         </div>
       </div>
     );
   }
 
-  // Vista móvil para pantallas < 500px
   if (isMobile) {
     return (
-      <MobileOperacionesCompartidasView
-        data={pieChartData}
-        title="Porcentaje de Exclusividad"
-      />
+      <div className="w-full">
+        <MobileOperacionesCompartidasView
+          data={pieChartData}
+          title="Porcentaje de Exclusividad"
+        />
+        {cantidadSinEspecificar > 0 && (
+          <p className="text-center text-gray-400 text-xs mt-2">
+            {cantidadSinEspecificar} operación
+            {cantidadSinEspecificar !== 1 ? "es" : ""} sin exclusividad asignada
+          </p>
+        )}
+      </div>
     );
   }
 
@@ -178,6 +193,12 @@ const ExclusivenessRosen = () => {
             </div>
           ))}
         </div>
+        {cantidadSinEspecificar > 0 && (
+          <p className="text-center text-gray-400 text-xs mt-2">
+            {cantidadSinEspecificar} operación
+            {cantidadSinEspecificar !== 1 ? "es" : ""} sin exclusividad asignada
+          </p>
+        )}
       </div>
     );
   }
@@ -392,6 +413,13 @@ const ExclusivenessRosen = () => {
             </div>
           </div>
         </div>
+      )}
+      {cantidadSinEspecificar > 0 && (
+        <p className="text-center text-gray-400 text-xs mt-2">
+          {cantidadSinEspecificar}{" "}
+          {cantidadSinEspecificar === 1 ? "operación" : "operaciones"} sin
+          exclusividad asignada
+        </p>
       )}
     </div>
   );
